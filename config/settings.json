@@ -3,7 +3,6 @@
     "simulated": true,
     "pin": 17
   },
-
   "DS1": {
     "simulated": true,
     "pin": 18

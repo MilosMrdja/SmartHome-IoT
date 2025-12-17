@@ -8,7 +8,7 @@ from components.dus1_component import run_dus1
 from common.cli_listener import run_console_listener
 
 from components.dl_component import run_dl
-from components.dpir1 import run_dpir1
+from components.dpir1_component import run_dpir1
 
 try:
     import RPi.GPIO as GPIO
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         run_ds1(ds1_settings, threads, stop_event)
         run_dus1(dus1_settings, threads, stop_event)
         dpir1_settings = settings['DPIR1']
-        run_dpir1(dpir1_settings, threads, stop_event, )
+        run_dpir1(dpir1_settings, threads, stop_event)
 
         console_thread = threading.Thread(
             target=run_console_listener,

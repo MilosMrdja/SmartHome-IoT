@@ -1,7 +1,7 @@
 import threading
 import time
-from simulators.dpir1 import run_dpir1_simulator
-print_lock = threading.Lock()
+from simulators.dpir1_simulator import run_dpir1_simulator
+from common.locks import print_lock
 
 def dpir1_callback(code):
     t = time.localtime()
@@ -14,11 +14,11 @@ def dpir1_callback(code):
 def run_dpir1(settings, threads, stop_event):
         if settings['simulated']:
             code = settings['code']
-            print(f'Starting {code} sumilator')
+            print(f'Starting {code} simulator')
             dpir1_thread = threading.Thread(target = run_dpir1_simulator, args=(2, dpir1_callback, stop_event, code))
             dpir1_thread.start()
             threads.append(dpir1_thread)
-            print("DPIR1 sumilator started")
+            print("DPIR1 simulator started")
         else:
             print("Please implement DL - PI support")
             '''
