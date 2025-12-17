@@ -1,9 +1,9 @@
 import threading
 import time
-from simulators.dl import run_dl_simulator
-print_lock = threading.Lock()
+from simulators.dl_simulator import run_dl_simulator
+from common.locks import print_lock
 
-def dht_callback(state):
+def dl_callback(state):
     t = time.localtime()
     with print_lock:
         print("="*50)
@@ -13,8 +13,7 @@ def dht_callback(state):
 def run_dl(settings, threads, stop_event):
         if settings['simulated']:
             print("Starting dl sumilator")
-            # 60 sec, because door state changes state rarely
-            dl_thread = threading.Thread(target = run_dl_simulator, args=(60, dht_callback, stop_event))
+            dl_thread = threading.Thread(target = run_dl_simulator, args=(2, dl_callback, stop_event))
             dl_thread.start()
             threads.append(dl_thread)
             print("Dl sumilator started")

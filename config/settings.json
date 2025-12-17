@@ -3,7 +3,16 @@
     "simulated": true,
     "pin": 17
   },
-  "DPIR1":{
+
+  "DS1": {
+    "simulated": true,
+    "pin": 18
+  },
+  "DUS1": {
+    "simulated": true,
+    "pin": 19
+  },
+  "DPIR1": {
     "simulated": true,
     "pin": 20,
     "code": "DPIR1"
