@@ -2,5 +2,13 @@
   "DL": {
     "simulated": true,
     "pin": 17
+  },
+  "DS1": {
+    "simulated": true,
+    "pin": 18
+  },
+  "DUS1": {
+    "simulated": true,
+    "pin": 19
   }
 }

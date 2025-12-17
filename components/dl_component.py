@@ -1,18 +1,19 @@
 import threading
 import time
-from simulators.dl import run_dl_simulator
+from simulators.dl_simulator import run_dl_simulator
+print_lock = threading.Lock()
 
-def dht_callback(state):
+def dl_callback(state):
     t = time.localtime()
-    print("="*50)
-    print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-    print("LED is ON" if state else "LED is OFF")
+    with print_lock:
+        print("="*50)
+        print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
+        print("LED is ON" if state else "LED is OFF")
 
 def run_dl(settings, threads, stop_event):
         if settings['simulated']:
             print("Starting dl sumilator")
-            # 60 sec, because door state changes state rarely
-            dl_thread = threading.Thread(target = run_dl_simulator, args=(60, dht_callback, stop_event))
+            dl_thread = threading.Thread(target = run_dl_simulator, args=(2, dl_callback, stop_event))
             dl_thread.start()
             threads.append(dl_thread)
             print("Dl sumilator started")

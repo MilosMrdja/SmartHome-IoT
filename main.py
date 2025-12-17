@@ -1,7 +1,9 @@
 import threading
 import time
 from config.load_settings import setup
-from components.dl import run_dl
+from components.dl_component import run_dl
+from components.ds1_component import run_ds1
+from components.dus1_component import run_dus1
 
 # without Raspberry Pi GPIO, the import will fail
 try:
@@ -18,7 +20,11 @@ if __name__ == "__main__":
     stop_event = threading.Event()
     try:
         dl_settings = settings['DL']
+        ds1_settings = settings['DS1']
+        dus1_settings = settings['DUS1']
         run_dl(dl_settings, threads, stop_event)
+        run_ds1(ds1_settings, threads, stop_event)
+        run_dus1(dus1_settings, threads, stop_event)
         while True:
             time.sleep(1)
 
