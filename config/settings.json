@@ -15,5 +15,12 @@
     "simulated": true,
     "pin": 20,
     "code": "DPIR1"
+  },
+  "DMS": {
+    "code": "DMS1",
+    "simulated": true,
+    "delay": 0.3,
+    "pin": 21
   }
+
 }

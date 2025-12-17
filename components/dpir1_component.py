@@ -7,8 +7,8 @@ def dpir1_callback(code):
     t = time.localtime()
     with print_lock:
         print("="*50)
-        print(f"Code: {code}")
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
+        print(f"Code: {code}")
         print("Motion detected")
 
 def run_dpir1(settings, threads, stop_event):
