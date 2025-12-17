@@ -1,12 +1,15 @@
 import threading
 import time
 from config.load_settings import setup
+
 from components.dl_component import run_dl
 from components.ds1_component import run_ds1
 from components.dus1_component import run_dus1
 from common.cli_listener import run_console_listener
 
-# without Raspberry Pi GPIO, the import will fail
+from components.dl import run_dl
+from components.dpir1 import run_dpir1
+
 try:
     import RPi.GPIO as GPIO
     GPIO.setmode(GPIO.BCM)
@@ -26,6 +29,8 @@ if __name__ == "__main__":
         run_dl(dl_settings, threads, stop_event)
         run_ds1(ds1_settings, threads, stop_event)
         run_dus1(dus1_settings, threads, stop_event)
+        dpir1_settings = settings['DPIR1']
+        run_dpir1(dpir1_settings, threads, stop_event, )
 
         console_thread = threading.Thread(
             target=run_console_listener,
@@ -43,3 +48,5 @@ if __name__ == "__main__":
         print('Stopping app')
         for t in threads:
             stop_event.set()
+        for t in threads:       
+            t.join() 
