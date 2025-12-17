@@ -1,23 +1,24 @@
 import threading
 import time
-from simulators.dl import run_dl_simulator
+from simulators.dpir1 import run_dpir1_simulator
 print_lock = threading.Lock()
 
-def dht_callback(state):
+def dpir1_callback(code):
     t = time.localtime()
     with print_lock:
         print("="*50)
+        print(f"Code: {code}")
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-        print("LED is ON" if state else "LED is OFF")
+        print("Motion detected")
 
-def run_dl(settings, threads, stop_event):
+def run_dpir1(settings, threads, stop_event):
         if settings['simulated']:
-            print("Starting dl sumilator")
-            # 60 sec, because door state changes state rarely
-            dl_thread = threading.Thread(target = run_dl_simulator, args=(60, dht_callback, stop_event))
-            dl_thread.start()
-            threads.append(dl_thread)
-            print("Dl sumilator started")
+            code = settings['code']
+            print(f'Starting {code} sumilator')
+            dpir1_thread = threading.Thread(target = run_dpir1_simulator, args=(2, dpir1_callback, stop_event, code))
+            dpir1_thread.start()
+            threads.append(dpir1_thread)
+            print("DPIR1 sumilator started")
         else:
             print("Please implement DL - PI support")
             '''

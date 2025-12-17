@@ -2,5 +2,10 @@
   "DL": {
     "simulated": true,
     "pin": 17
+  },
+  "DPIR1":{
+    "simulated": true,
+    "pin": 20,
+    "code": "DPIR1"
   }
 }
