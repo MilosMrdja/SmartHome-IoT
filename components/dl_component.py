@@ -12,11 +12,11 @@ def dl_callback(state):
 
 def run_dl(settings, threads, stop_event):
         if settings['simulated']:
-            print("Starting dl sumilator")
+            print("Starting dl simulator")
             dl_thread = threading.Thread(target = run_dl_simulator, args=(2, dl_callback, stop_event))
             dl_thread.start()
             threads.append(dl_thread)
-            print("Dl sumilator started")
+            print("Dl simulator started")
         else:
             print("Please implement DL - PI support")
             '''

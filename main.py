@@ -10,6 +10,7 @@ from common.cli_listener import run_console_listener
 from components.dl_component import run_dl
 from components.dpir1_component import run_dpir1
 from components.dms_component import run_dms
+from components.db_component import run_db
 
 try:
     import RPi.GPIO as GPIO
@@ -32,7 +33,10 @@ if __name__ == "__main__":
         run_dus1(dus1_settings, threads, stop_event)
         dpir1_settings = settings['DPIR1']
         dms_settings = settings['DMS']
+        db_settings = settings['DB']
+        run_dpir1(dpir1_settings, threads, stop_event)
         run_dms(dms_settings, threads, stop_event)
+        run_db(db_settings, threads, stop_event)
 
         console_thread = threading.Thread(
             target=run_console_listener,

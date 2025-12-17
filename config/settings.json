@@ -17,10 +17,17 @@
     "code": "DPIR1"
   },
   "DMS": {
-    "code": "DMS1",
+    "code": "DMS",
     "simulated": true,
     "delay": 0.3,
     "pin": 21
+  },
+    "DB": {
+    "code": "DB",
+    "simulated": true,
+    "duration": 0.1,
+    "pitch": 440,
+    "pin": 22
   }
 
 }
