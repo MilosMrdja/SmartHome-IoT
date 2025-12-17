@@ -1,7 +1,7 @@
 import threading
 import time
 from simulators.ds1_simulator import run_ds1_simulator
-print_lock = threading.Lock()
+from common.locks import print_lock
 
 def ds1_callback():
     t = time.localtime()

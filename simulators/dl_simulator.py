@@ -1,23 +1,21 @@
 import time
-import random
+import threading
 
-def generate_dl_state(initial_state=False, min_duration=2):
-    state = initial_state
-    counter = 0
+led_state = False
+state_lock = threading.Lock()
 
-    while True:
-        
-        if counter >= min_duration:
-            if random.random() < 0.1: 
-                state = not state
-                counter = 0  
-        counter += 1
-        yield state
+def set_led_state(value: bool):
+    with state_lock:
+        global led_state
+        led_state = value
+
+def get_led_state():
+    with state_lock:
+        return led_state
+
 
 def run_dl_simulator(delay, callback, stop_event):
-    for state in generate_dl_state():
-        time.sleep(delay)
+    while not stop_event.is_set():
+        state = get_led_state()
         callback(state)
-
-        if stop_event.is_set():
-            break
+        time.sleep(delay)

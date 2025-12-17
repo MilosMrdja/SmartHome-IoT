@@ -1,7 +1,7 @@
 import threading
 import time
 from simulators.dl_simulator import run_dl_simulator
-print_lock = threading.Lock()
+from common.locks import print_lock
 
 def dl_callback(state):
     t = time.localtime()

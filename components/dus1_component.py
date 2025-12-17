@@ -1,7 +1,7 @@
 import threading
 import time
 from simulators.dus1_simulator import run_dus1_simulator
-print_lock = threading.Lock()
+from common.locks import print_lock
 
 def dus1_callback(distance):
     t = time.localtime()
