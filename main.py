@@ -7,7 +7,7 @@ from components.ds1_component import run_ds1
 from components.dus1_component import run_dus1
 from common.cli_listener import run_console_listener
 
-from components.dl import run_dl
+from components.dl_component import run_dl
 from components.dpir1 import run_dpir1
 
 try:
