@@ -2,8 +2,8 @@ import threading
 import time
 from config.load_settings import setup
 from components.dl import run_dl
+from components.dpir1 import run_dpir1
 
-# without Raspberry Pi GPIO, the import will fail
 try:
     import RPi.GPIO as GPIO
     GPIO.setmode(GPIO.BCM)
@@ -19,6 +19,8 @@ if __name__ == "__main__":
     try:
         dl_settings = settings['DL']
         run_dl(dl_settings, threads, stop_event)
+        dpir1_settings = settings['DPIR1']
+        run_dpir1(dpir1_settings, threads, stop_event, )
         while True:
             time.sleep(1)
 
@@ -26,3 +28,5 @@ if __name__ == "__main__":
         print('Stopping app')
         for t in threads:
             stop_event.set()
+        for t in threads:       
+            t.join() 
