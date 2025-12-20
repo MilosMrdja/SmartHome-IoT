@@ -17,9 +17,9 @@ def generate_dus1_distance(closed_distance=5, open_distance=100, noise=2, open_p
         base = closed_distance if door_closed else open_distance
         yield base + random.randint(-noise, noise)
 
-def run_dus1_simulator(delay, callback, stop_event):
+def run_dus1_simulator(delay, callback, stop_event, code):
     for distance in generate_dus1_distance():
         time.sleep(delay)
-        callback(distance)
+        callback(distance, code)
         if stop_event.is_set():
             break

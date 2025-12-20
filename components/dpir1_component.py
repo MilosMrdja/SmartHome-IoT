@@ -20,13 +20,4 @@ def run_dpir1(settings, threads, stop_event):
             threads.append(dpir1_thread)
             print("DPIR1 simulator started")
         else:
-            print("Please implement DL - PI support")
-            '''
-            from sensors.dht import run_dht_loop, DHT
-            print("Starting dht1 loop")
-            dht = DHT(settings['pin'])
-            dht1_thread = threading.Thread(target=run_dht_loop, args=(dht, 2, dht_callback, stop_event))
-            dht1_thread.start()
-            threads.append(dht1_thread)
-            print("Dht1 loop started")
-            '''
+            pass

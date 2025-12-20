@@ -31,4 +31,4 @@ def run_dms(settings, threads, stop_event):
 
         print("DMS simulator started")
     else:
-        print("Please implement KEYPAD - PI support")
+        pass

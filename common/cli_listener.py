@@ -12,7 +12,7 @@ def run_console_listener(stop_event):
         
         with patch_stdout():
             try:
-                cmd = session.prompt("> ").strip().lower()
+                cmd = session.prompt("Type: LED ON, LED OFF, BUZZER ON or EXIT\n> ").strip().lower()
             except (EOFError, KeyboardInterrupt):
                 stop_event.set()
                 break

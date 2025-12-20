@@ -33,4 +33,4 @@ def run_db(settings, threads, stop_event):
 
         print("DB simulator started")
     else:
-        print("Please implement DB - PI support")
+        pass

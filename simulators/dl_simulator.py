@@ -14,8 +14,8 @@ def get_led_state():
         return led_state
 
 
-def run_dl_simulator(delay, callback, stop_event):
+def run_dl_simulator(delay, callback, stop_event, code):
     while not stop_event.is_set():
         state = get_led_state()
-        callback(state)
+        callback(state, code)
         time.sleep(delay)

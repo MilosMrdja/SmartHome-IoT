@@ -1,15 +1,21 @@
 {
   "DL": {
     "simulated": true,
-    "pin": 17
+    "pin": 17,
+    "delay": 2,
+    "code": "DL"
   },
   "DS1": {
     "simulated": true,
-    "pin": 18
+    "pin": 18,
+    "delay": 2,
+    "code": "DS1"
   },
   "DUS1": {
     "simulated": true,
-    "pin": 19
+    "pin": 19,
+    "delay": 0.5,
+    "code": "DUS1"
   },
   "DPIR1": {
     "simulated": true,
@@ -22,12 +28,11 @@
     "delay": 0.3,
     "pin": 21
   },
-    "DB": {
+  "DB": {
     "code": "DB",
     "simulated": true,
     "duration": 0.1,
     "pitch": 440,
     "pin": 22
   }
-
 }

@@ -1,22 +1,23 @@
 import random
 import time
 
-def generate_ds1_state(initial_state=True, min_duration=2):
-
-    state = initial_state
+def generate_ds1_state(min_duration=2):
     counter = 0
-    while True:
-        if counter >= min_duration:
-            if random.random() > 0.2:
-                state = not state
-                counter = 0
-        counter+=1
-        yield state
 
-def run_ds1_simulator(delay, callback, stop_event):
+    while True:
+        if counter >= min_duration and random.random() > 0.2:
+            counter = 0
+            yield True  
+        else:
+            yield False 
+
+        counter += 1
+
+
+def run_ds1_simulator(delay, callback, stop_event, code):
     for state in generate_ds1_state():
         time.sleep(delay)
         if state:
-            callback()
+            callback(code)
         if stop_event.is_set():
             break
