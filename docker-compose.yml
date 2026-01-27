@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  grafana:
+    image: grafana/grafana:10.3.1
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
   mosquitto:
     image: eclipse-mosquitto:2
     container_name: mqtt5
@@ -46,4 +54,9 @@ secrets:
 volumes:
   influxdb2-data:
   influxdb2-config:
+  grafana-data:
+networks:
+  monitoring:
+    driver: bridge
+
   
