@@ -1,4 +1,13 @@
 {
+  "device_info": {
+    "pi_id": "PI1",
+    "device_name": "Gate_Control_Unit"
+  },
+  "mqtt": {
+    "broker_hostname": "192.168.0.102",
+    "port": 1883,
+    "topic": "iot/pi1/batch"
+  },
   "DL": {
     "simulated": true,
     "pin": 17,
