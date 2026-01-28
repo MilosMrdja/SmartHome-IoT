@@ -7,7 +7,7 @@ import json
 app = Flask(__name__)
 
 # --- KONFIGURACIJA ---
-MQTT_BROKER = "192.168.0.102"   # LAN IP Windows mašine ili 'mqtt5' ako je Docker
+MQTT_BROKER = "192.168.107.198"   # LAN IP Windows mašine ili 'mqtt5' ako je Docker
 MQTT_TOPIC = "iot/+/batch"
 
 INFLUX_URL = "http://localhost:8086"

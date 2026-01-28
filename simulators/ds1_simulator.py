@@ -14,10 +14,10 @@ def generate_ds1_state(min_duration=2):
         counter += 1
 
 
-def run_ds1_simulator(delay, callback, stop_event, code):
+def run_ds1_simulator(delay, callback, stop_event, code, device_info, settings):
     for state in generate_ds1_state():
         time.sleep(delay)
         if state:
-            callback(code)
+            callback(code, device_info, settings)
         if stop_event.is_set():
             break

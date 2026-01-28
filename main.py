@@ -39,6 +39,9 @@ if __name__ == "__main__":
 
     # 2. Pokretanje senzora
     run_dl(settings['DL'], threads, stop_event, device_info)
+    run_db(settings['DB'], threads, stop_event, device_info)
+    run_ds1(settings['DS1'], threads, stop_event, device_info)
+    run_dpir1(settings['DPIR1'], threads, stop_event, device_info)
 
     try:
         while True:

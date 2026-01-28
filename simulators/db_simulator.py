@@ -18,8 +18,7 @@ def get_buzzer_state():
 
 def run_db_simulator(loop_delay, callback, stop_event, code, pitch, duration):
     while not stop_event.is_set():
-
-        if get_buzzer_state():
+        if True:
             period = 1.0 / pitch
             half_period = period / 2
             cycles = int(duration * pitch)

@@ -4,7 +4,7 @@
     "device_name": "Gate_Control_Unit"
   },
   "mqtt": {
-    "broker_hostname": "192.168.0.102",
+    "broker_hostname": "192.168.107.198",
     "port": 1883,
     "topic": "iot/pi1/batch"
   },
@@ -27,8 +27,8 @@
     "code": "DUS1"
   },
   "DPIR1": {
-    "simulated": true,
-    "pin": 20,
+    "simulated": false,
+    "pin": 17,
     "code": "DPIR1"
   },
   "DMS": {
@@ -39,9 +39,10 @@
   },
   "DB": {
     "code": "DB",
-    "simulated": true,
+    "simulated": false,
     "duration": 0.1,
     "pitch": 440,
-    "pin": 22
+    "pin": 22,
+    "delay": 0.5
   }
 }
