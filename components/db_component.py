@@ -17,16 +17,6 @@ def db_callback(state, code, settings, device_info):
     batch_queue.put(payload) # Dodavanje u red (Thread-safe)
     print(f"[{code}] Sent to buffer: {'ON' if state else 'OFF'}")
 
-    # Tvoj stari print log
-    #print(f"[{code}] Sent to buffer: {'ON' if state else 'OFF'}")
-    #t = time.localtime()
-    #with print_lock:
-     #   print("=" * 50)
-      #  print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-       # print(f"Code: {code}")
-        #print("BUZZER HIGH" if state else "BUZZER LOW")
-
-
 def run_db(settings, threads, stop_event, device_info):
     if settings['simulated']:
         print("Starting DB simulator")
@@ -34,6 +24,7 @@ def run_db(settings, threads, stop_event, device_info):
         pitch = settings.get('pitch', 440)
         duration = settings.get('duration', 0.1)
         code = settings['code']
+        print("Starting {code} simulator")
         delay = settings['delay']
 
 

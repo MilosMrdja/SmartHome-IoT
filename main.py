@@ -38,10 +38,13 @@ if __name__ == "__main__":
     threads.append(mqtt_thread)
 
     # 2. Pokretanje senzora
-    run_dl(settings['DL'], threads, stop_event, device_info)
-    run_db(settings['DB'], threads, stop_event, device_info)
-    run_ds1(settings['DS1'], threads, stop_event, device_info)
-    run_dpir1(settings['DPIR1'], threads, stop_event, device_info)
+    # run_ds1(settings['DS1'], threads, stop_event, device_info)
+    # run_dl(settings['DL'], threads, stop_event, device_info)
+    # run_dus1(settings['DUS1'], threads, stop_event, device_info)
+    # run_db(settings['DB'], threads, stop_event, device_info)
+    # run_dpir1(settings['DPIR1'], threads, stop_event, device_info)
+    run_dms(settings['DMS'], threads, stop_event, device_info)
+
 
     try:
         while True:

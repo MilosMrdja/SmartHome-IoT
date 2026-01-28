@@ -18,10 +18,10 @@ def ds1_callback(code, device_info, settings):
 
 def run_ds1(settings, threads, stop_event, device_info):
         if settings['simulated']:
-            print("Starting ds1 sumilator")
             delay = settings['delay']
             code = settings['code']
-            ds1_thread = threading.Thread(target = run_ds1_simulator, args=(delay, lambda c: ds1_callback(c, settings, device_info), stop_event, code, device_info, settings))
+            print("Starting {code} simulator")
+            ds1_thread = threading.Thread(target = run_ds1_simulator, args=(delay, lambda c, d, s: ds1_callback(c, d, s), stop_event, code, device_info, settings))
             ds1_thread.start()
             threads.append(ds1_thread)
             print("DS1 sumilator started")

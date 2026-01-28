@@ -22,9 +22,10 @@ def dl_callback(state, code, settings, device_info):
 
 def run_dl(settings, threads, stop_event, device_info):
         if settings['simulated']:
-            print("Starting dl simulator")
             delay = settings['delay']
             code = settings['code']
+            print("Starting {code} simulator")
+
             # Lambda se koristi da bi callback dobio i settings i device_info
             dl_thread = threading.Thread(
                 target=run_dl_simulator, 
