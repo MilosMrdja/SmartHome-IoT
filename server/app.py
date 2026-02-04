@@ -7,11 +7,11 @@ import json
 app = Flask(__name__)
 
 # --- KONFIGURACIJA ---
-MQTT_BROKER = "192.168.56.1"   # LAN IP Windows mašine ili 'mqtt5' ako je Docker
+MQTT_BROKER = "192.168.107.198"   # LAN IP Windows mašine ili 'mqtt5' ako je Docker
 MQTT_TOPIC = "iot/+/batch"
 
 INFLUX_URL = "http://localhost:8086"
-INFLUX_TOKEN = "XXcMbywlSgRBBsaNb6hQ5QpviBZlXPWSkMjpRqm09rpA25FiFttleSuVBElGbf7Tq20GnylasK5o1brWHyPvSA=="
+INFLUX_TOKEN = "j0-_bKfjl_1qTu3-8M9FOvEsKssZRHBdRdtbW0R16itM_cyiRFqEiOILNPUmqS0mron8SPVBpgx-KW-Sjy4BJA=="
 INFLUX_ORG = "docs"
 INFLUX_BUCKET = "home"
 
@@ -32,10 +32,11 @@ def on_message(client, userdata, msg):
             # Kreiraj InfluxDB Point
             point = (
                 Point(data['measurement'])
+                .tag("code", data['code'])
                 .tag("pi_id", data['pi_id'])
                 .tag("device_name", data['device_name'])
                 .tag("simulated", str(data['simulated']))
-                .field("value", float(data['value']))
+                .field("value", data['value']) #TODO izmeniti za dms
             )
             write_api.write(bucket=INFLUX_BUCKET, record=point)
             print(f"Saved to Influx: {data}")

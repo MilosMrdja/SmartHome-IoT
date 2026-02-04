@@ -4,7 +4,7 @@
     "device_name": "Gate_Control_Unit"
   },
   "mqtt": {
-    "broker_hostname": "192.168.56.1",
+    "broker_hostname": "192.168.107.198",
     "port": 1883,
     "topic": "iot/pi1/batch"
   },
@@ -21,7 +21,7 @@
     "code": "DS1"
   },
   "DUS1": {
-    "simulated": true,
+    "simulated": false,
     "trig_pin": 23,
     "echo_pin": 24,
     "max_iter": 100,
@@ -36,8 +36,8 @@
   },
   "DMS": {
     "code": "DMS",
-    "simulated": true,
-    "delay": 0.3,
+    "simulated": false,
+    "delay": 10,
     "pin": 21,
     "r_pins": [25, 8, 7, 1],
     "c_pins": [12, 16, 20, 21]
@@ -48,6 +48,6 @@
     "duration": 0.1,
     "pitch": 440,
     "pin": 22,
-    "delay": 2
+    "delay": 10
   }
 }
