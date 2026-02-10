@@ -1,5 +1,12 @@
 import threading
 import time
+from components.btn_component import run_btn
+from components.dht.dht3_component import run_dht3
+from components.dpir2_component import run_dpir2
+from components.ds2_component import run_ds2
+from components.dus2_component import run_dus2
+from components.gsg.gsg_component import run_gsg
+from components.webc_component import run_webc
 from config.load_settings import setup
 from common.mqqt_sender import mqtt_batch_daemon
 
@@ -37,13 +44,25 @@ if __name__ == "__main__":
     mqtt_thread.start()
     threads.append(mqtt_thread)
 
-    # 2. Pokretanje senzora
-    run_ds1(settings['DS1'], threads, stop_event, device_info) # vezbe 2
-    run_dl(settings['DL'], threads, stop_event, device_info) # vezbe 1
-    run_dus1(settings['DUS1'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
-    run_db(settings['DB'], threads, stop_event, device_info) # vezbe 2
-    run_dpir1(settings['DPIR1'], threads, stop_event, device_info) # vezbe 2
-    run_dms(settings['DMS'], threads, stop_event, device_info) # vezbe 4
+    # 2. Pokretanje senzora za odredjeni PI
+    if settings["device_info"]["pi_id"] == "PI1" :
+        run_ds1(settings['DS1'], threads, stop_event, device_info) # vezbe 2
+        run_dl(settings['DL'], threads, stop_event, device_info) # vezbe 1
+        run_dus1(settings['DUS1'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
+        run_db(settings['DB'], threads, stop_event, device_info) # vezbe 2
+        run_dpir1(settings['DPIR1'], threads, stop_event, device_info) # vezbe 2
+        run_dms(settings['DMS'], threads, stop_event, device_info) # vezbe 4
+        run_webc(settings['WEBC'],threads, stop_event, device_info) # utvrditi kako radi
+    elif settings["device_info"]["pi_id"] == "PI2":
+        run_ds2(settings['DS2'], threads, stop_event, device_info)
+        run_dus2(settings['DUS2'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
+        run_dpir2(settings['DPIR2'], threads, stop_event, device_info) # vezbe 2
+        # run_4sd(settings['4SD'], threads, stop_event, device_info)
+        run_btn(settings['BTN'], threads, stop_event, device_info)
+        run_dht3(settings['DHT3'], threads, stop_event, device_info) # vezbe 3
+        run_gsg(settings['GSG'], threads, stop_event, device_info) # vezbe 6
+    elif settings["device_info"]["pi_id"] == "PI3":
+        pass
 
 
     try:

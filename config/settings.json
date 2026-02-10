@@ -1,10 +1,10 @@
 {
   "device_info": {
-    "pi_id": "PI1",
+    "pi_id": "PI2",
     "device_name": "Gate_Control_Unit"
   },
   "mqtt": {
-    "broker_hostname": "192.168.107.198",
+    "broker_hostname": "192.168.65.203",
     "port": 1883,
     "topic": "iot/pi1/batch"
   },
@@ -21,7 +21,7 @@
     "code": "DS1"
   },
   "DUS1": {
-    "simulated": false,
+    "simulated": true,
     "trig_pin": 23,
     "echo_pin": 24,
     "max_iter": 100,
@@ -36,7 +36,7 @@
   },
   "DMS": {
     "code": "DMS",
-    "simulated": false,
+    "simulated": true,
     "delay": 10,
     "pin": 21,
     "r_pins": [25, 8, 7, 1],
@@ -49,5 +49,43 @@
     "pitch": 440,
     "pin": 22,
     "delay": 10
+  },
+  "DS2": {
+    "simulated": true,
+    "pin": 18,
+    "delay": 2,
+    "code": "DS2"
+  },
+  "DUS2": {
+    "simulated": true,
+    "trig_pin": 23,
+    "echo_pin": 24,
+    "max_iter": 100,
+    "delay": 1,
+    "code": "DUS2"
+  },
+  "DPIR2": {
+    "simulated": true,
+    "pin": 17,
+    "code": "DPIR2",
+    "delay": 2
+  },
+  "BTN": {
+    "simulated": true,
+    "pin": 18,
+    "delay": 2,
+    "code": "BTN"
+  },
+  "DHT3": {
+    "code": "DHT3",
+    "simulated": true,
+    "pin": 17,
+    "delay": 2
+  },
+  "GSG": {
+    "code": "GSG",
+    "simulated": true,
+    "i2c_address": "0x68",
+    "delay": 0.5
   }
 }
