@@ -1,6 +1,6 @@
 {
   "device_info": {
-    "pi_id": "PI2",
+    "pi_id": "PI1",
     "device_name": "Gate_Control_Unit"
   },
   "mqtt": {
@@ -46,9 +46,8 @@
     "code": "DB",
     "simulated": true,
     "duration": 0.1,
-    "pitch": 440,
-    "pin": 22,
-    "delay": 10
+    "pitch": 10000,
+    "pin": 17
   },
   "DS2": {
     "simulated": true,
@@ -78,7 +77,7 @@
   },
   "DHT3": {
     "code": "DHT3",
-    "simulated": false,
+    "simulated": true,
     "pin": 17,
     "delay": 2
   },

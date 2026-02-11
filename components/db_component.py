@@ -39,4 +39,28 @@ def run_db(settings, threads, stop_event, device_info):
 
         print("DB simulator started")
     else:
-        pass
+        code = settings['code']
+        import RPi.GPIO as GPIO
+        import time
+        GPIO.setmode(GPIO.BCM)
+        buzzer_pin = settings["pin"]
+        GPIO.setup(buzzer_pin, GPIO.OUT)
+        def buzz(pitch, duration):
+            period = 1.0 / pitch
+            delay = period / 2
+            cycles = int(duration * pitch)
+            for i in range(cycles):
+                GPIO.output(buzzer_pin, True)
+                db_callback(True, code, settings, device_info)
+                time.sleep(delay)
+                GPIO.output(buzzer_pin, False)
+                db_callback(False, code, settings, device_info)
+                time.sleep(delay)
+        try:
+            while True:
+                pitch = settings["pitch"]
+                duration = settings["duration"]
+                buzz(pitch, duration)
+                time.sleep(1)
+        except KeyboardInterrupt:
+            GPIO.cleanup()

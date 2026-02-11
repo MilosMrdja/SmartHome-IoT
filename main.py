@@ -52,7 +52,7 @@ if __name__ == "__main__":
         run_db(settings['DB'], threads, stop_event, device_info) # vezbe 2
         run_dpir1(settings['DPIR1'], threads, stop_event, device_info) # vezbe 2
         run_dms(settings['DMS'], threads, stop_event, device_info) # vezbe 4
-        run_webc(settings['WEBC'],threads, stop_event, device_info)
+        # run_webc(settings['WEBC'],threads, stop_event, device_info)
         # export http_proxy="http://proxy.uns.ac.rs:8080"
         # export https_proxy="http://proxy.uns.ac.rs:8080"
         # mjpg_streamer -i "input_uvc.so" -o "output_http.so -p 8080 -w /usr/local/share/mjpg-streamer/www"
