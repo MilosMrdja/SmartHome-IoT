@@ -19,8 +19,8 @@ def gsg_callback(code, device_info, settings, accel, gyro):
 
 
 def real_gsg_loop(settings, stop_event, device_info):
-    import MPU6050
-    mpu = MPU6050.MPU6050()
+    from .MPU6050 import MPU6050
+    mpu = MPU6050()
     mpu.dmp_initialize()
     code = settings['code']
     

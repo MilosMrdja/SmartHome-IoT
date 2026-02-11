@@ -4,7 +4,7 @@
     "device_name": "Gate_Control_Unit"
   },
   "mqtt": {
-    "broker_hostname": "192.168.65.203",
+    "broker_hostname": "192.168.107.129",
     "port": 1883,
     "topic": "iot/pi1/batch"
   },
@@ -84,7 +84,7 @@
   },
   "GSG": {
     "code": "GSG",
-    "simulated": true,
+    "simulated": false,
     "i2c_address": "0x68",
     "delay": 0.5
   }

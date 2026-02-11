@@ -20,7 +20,7 @@ def run_btn(settings, threads, stop_event, device_info):
         if settings['simulated']:
             delay = settings['delay']
             code = settings['code']
-            print("Starting {code} simulator")
+            print(f"Starting {code} simulator")
             ds1_thread = threading.Thread(target = run_btn_simulator, args=(delay, lambda c, d, s: btn_callback(c, d, s), stop_event, code, device_info, settings))
             ds1_thread.start()
             threads.append(ds1_thread)
