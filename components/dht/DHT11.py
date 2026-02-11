@@ -2,11 +2,11 @@
 
 import RPi.GPIO as GPIO
 import time
-import LA_DHT as DHT
+from .LA_DHT import DHT
 DHTPin = 17     #define the pin of DHT11
 
 def loop():
-    dht = DHT.DHT(DHTPin)   #create a DHT class object
+    dht = DHT(DHTPin)   #create a DHT class object
     sumCnt = 0              #number of reading times 
     while(True):
         sumCnt += 1         #counting number of reading times

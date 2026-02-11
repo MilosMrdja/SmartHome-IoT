@@ -78,13 +78,13 @@
   },
   "DHT3": {
     "code": "DHT3",
-    "simulated": true,
+    "simulated": false,
     "pin": 17,
     "delay": 2
   },
   "GSG": {
     "code": "GSG",
-    "simulated": false,
+    "simulated": true,
     "i2c_address": "0x68",
     "delay": 0.5
   }

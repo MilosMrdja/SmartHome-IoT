@@ -19,10 +19,10 @@ def dht3_callback(code, device_info, settings, temperature, humidity):
 
 def real_dht3_loop(settings, stop_event, device_info):
     import RPi.GPIO as GPIO
-    import LA_DHT as DHT
+    from .LA_DHT import DHT
     
-    DHTPin = 17 
-    dht = DHT.DHT(DHTPin)
+    DHTPin = settings["pin"] 
+    dht = DHT(DHTPin)
     code = settings['code']
     
     while not stop_event.is_set():
