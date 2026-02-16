@@ -1,11 +1,17 @@
 import threading
 import time
+from components.brgb_component import run_brgb
 from components.btn_component import run_btn
+from components.dht.dht1_component import run_dht1
+from components.dht.dht2_component import run_dht2
 from components.dht.dht3_component import run_dht3
 from components.dpir2_component import run_dpir2
+from components.dpir3_component import run_dpir3
 from components.ds2_component import run_ds2
 from components.dus2_component import run_dus2
 from components.gsg.gsg_component import run_gsg
+from components.ir_component import run_ir
+from components.lcd.lcd_component import run_lcd
 from components.webc_component import run_webc
 from config.load_settings import setup
 from common.mqqt_sender import mqtt_batch_daemon
@@ -66,7 +72,13 @@ if __name__ == "__main__":
         run_dht3(settings['DHT3'], threads, stop_event, device_info) # vezbe 3
         run_gsg(settings['GSG'], threads, stop_event, device_info) # vezbe 6
     elif settings["device_info"]["pi_id"] == "PI3":
-        pass
+        run_dht1(settings['DHT1'], threads, stop_event, device_info) # vezbe 3
+        run_dht2(settings['DHT2'], threads, stop_event, device_info) # vezbe 3
+        run_ir(settings['IR'], threads, stop_event, device_info) # vezbe 5
+        run_brgb(settings['BRGB'], threads, stop_event, device_info) # vezbe 4
+        run_lcd(settings['LCD'], threads, stop_event, device_info) # vezbe 3
+        run_dpir3(settings['DPIR3'], threads, stop_event, device_info) # vezbe 2
+
 
 
     try:

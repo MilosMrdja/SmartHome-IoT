@@ -12,11 +12,10 @@ def dl_callback(state, code, settings, device_info):
         "pi_id": device_info['pi_id'],
         "code": code,
         "value": 1 if state else 0,
-        "simulated": settings['simulated'] # Tag da li je simulirano
+        "simulated": settings['simulated']
     }
-    batch_queue.put(payload) # Dodavanje u red (Thread-safe)
+    batch_queue.put(payload)
     
-    # Tvoj stari print log
     print(f"[{code}] Sent to buffer: {'ON' if state else 'OFF'}")
 
 
@@ -26,7 +25,6 @@ def run_dl(settings, threads, stop_event, device_info):
             code = settings['code']
             print("Starting {code} simulator")
 
-            # Lambda se koristi da bi callback dobio i settings i device_info
             dl_thread = threading.Thread(
                 target=run_dl_simulator, 
                 args=(delay, lambda s, c: dl_callback(s, c, settings, device_info), stop_event, code)

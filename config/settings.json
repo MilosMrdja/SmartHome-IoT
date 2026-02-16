@@ -1,6 +1,6 @@
 {
   "device_info": {
-    "pi_id": "PI1",
+    "pi_id": "PI3",
     "device_name": "Gate_Control_Unit"
   },
   "mqtt": {
@@ -86,5 +86,43 @@
     "simulated": true,
     "i2c_address": "0x68",
     "delay": 0.5
+  },
+  "DHT1": {
+    "code": "DHT1",
+    "simulated": true,
+    "pin": 17,
+    "delay": 2
+  },
+  "DHT2": {
+    "code": "DHT2",
+    "simulated": true,
+    "pin": 17,
+    "delay": 2
+  },
+  "DPIR3": {
+    "simulated": true,
+    "pin": 17,
+    "code": "DPIR3",
+    "delay": 2
+  },
+  "IR": {
+    "simulated": true,
+    "pin": 17,
+    "code": "IR",
+    "delay": 2
+  },
+  "BRGB":{
+    "simulated": true,
+    "code": "BRGB",
+    "delay": 2,
+    "red_pin": 12,
+    "green_pin": 13,
+    "blue_pin": 19
+  },
+  "LCD": {
+    "simulated": true,
+    "pin": 17,
+    "code": "LCD",
+    "delay": 2
   }
 }
