@@ -1,6 +1,6 @@
 {
   "device_info": {
-    "pi_id": "PI3",
+    "pi_id": "PI2",
     "device_name": "Gate_Control_Unit"
   },
   "mqtt": {
@@ -68,6 +68,13 @@
     "pin": 17,
     "code": "DPIR2",
     "delay": 2
+  },
+  "4SD": {
+    "simulated": true,
+    "code": "4SD",
+    "delay": 2,
+    "segment_pins": [11, 4, 23, 8, 7, 10, 18, 25],
+    "digit_pins": [22, 27, 17, 24]
   },
   "BTN": {
     "simulated": true,

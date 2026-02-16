@@ -1,5 +1,6 @@
 import threading
 import time
+from components._4sd_component import run_4sd
 from components.brgb_component import run_brgb
 from components.btn_component import run_btn
 from components.dht.dht1_component import run_dht1
@@ -67,7 +68,7 @@ if __name__ == "__main__":
         run_ds2(settings['DS2'], threads, stop_event, device_info)
         run_dus2(settings['DUS2'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
         run_dpir2(settings['DPIR2'], threads, stop_event, device_info) # vezbe 2
-        # # run_4sd(settings['4SD'], threads, stop_event, device_info)
+        run_4sd(settings['4SD'], threads, stop_event, device_info) # vezbe 4
         run_btn(settings['BTN'], threads, stop_event, device_info)
         run_dht3(settings['DHT3'], threads, stop_event, device_info) # vezbe 3
         run_gsg(settings['GSG'], threads, stop_event, device_info) # vezbe 6
