@@ -68,7 +68,7 @@ if __name__ == "__main__":
         run_ds2(settings['DS2'], threads, stop_event, device_info)
         run_dus2(settings['DUS2'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
         run_dpir2(settings['DPIR2'], threads, stop_event, device_info) # vezbe 2
-        run_4sd(settings['4SD'], threads, stop_event, device_info) # vezbe 4
+        run_4sd(settings['4SD'], threads, stop_event, device_info) # vezbe 4 # nece biti
         run_btn(settings['BTN'], threads, stop_event, device_info)
         run_dht3(settings['DHT3'], threads, stop_event, device_info) # vezbe 3
         run_gsg(settings['GSG'], threads, stop_event, device_info) # vezbe 6
@@ -76,7 +76,7 @@ if __name__ == "__main__":
         run_dht1(settings['DHT1'], threads, stop_event, device_info) # vezbe 3
         run_dht2(settings['DHT2'], threads, stop_event, device_info) # vezbe 3
         run_ir(settings['IR'], threads, stop_event, device_info) # vezbe 5
-        run_brgb(settings['BRGB'], threads, stop_event, device_info) # vezbe 4
+        run_brgb(settings['BRGB'], threads, stop_event, device_info) # vezbe 4 # otpornici 220 oma # ne ide na 3.3v nego na ground
         run_lcd(settings['LCD'], threads, stop_event, device_info) # vezbe 3
         run_dpir3(settings['DPIR3'], threads, stop_event, device_info) # vezbe 2
 

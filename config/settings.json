@@ -128,7 +128,6 @@
   },
   "LCD": {
     "simulated": true,
-    "pin": 17,
     "code": "LCD",
     "delay": 2
   }

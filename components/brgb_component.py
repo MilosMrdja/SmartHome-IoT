@@ -31,21 +31,37 @@ def run_brgb_real(callback, stop_event, code, settings, device_info):
     GPIO.setup(BLUE_PIN, GPIO.OUT)
 
     def turnOff():
-        GPIO.output(RED_PIN, GPIO.LOW); GPIO.output(GREEN_PIN, GPIO.LOW); GPIO.output(BLUE_PIN, GPIO.LOW)
+        GPIO.output(RED_PIN, GPIO.LOW)
+        GPIO.output(GREEN_PIN, GPIO.LOW)
+        GPIO.output(BLUE_PIN, GPIO.LOW)
     def white():
-        GPIO.output(RED_PIN, GPIO.HIGH); GPIO.output(GREEN_PIN, GPIO.HIGH); GPIO.output(BLUE_PIN, GPIO.HIGH)
+        GPIO.output(RED_PIN, GPIO.HIGH)
+        GPIO.output(GREEN_PIN, GPIO.HIGH)
+        GPIO.output(BLUE_PIN, GPIO.HIGH)
     def red():
-        GPIO.output(RED_PIN, GPIO.HIGH); GPIO.output(GREEN_PIN, GPIO.LOW); GPIO.output(BLUE_PIN, GPIO.LOW)
+        GPIO.output(RED_PIN, GPIO.HIGH)
+        GPIO.output(GREEN_PIN, GPIO.LOW)
+        GPIO.output(BLUE_PIN, GPIO.LOW)
     def green():
-        GPIO.output(RED_PIN, GPIO.LOW); GPIO.output(GREEN_PIN, GPIO.HIGH); GPIO.output(BLUE_PIN, GPIO.LOW)
+        GPIO.output(RED_PIN, GPIO.LOW)
+        GPIO.output(GREEN_PIN, GPIO.HIGH)
+        GPIO.output(BLUE_PIN, GPIO.LOW)
     def blue():
-        GPIO.output(RED_PIN, GPIO.LOW); GPIO.output(GREEN_PIN, GPIO.LOW); GPIO.output(BLUE_PIN, GPIO.HIGH)
+        GPIO.output(RED_PIN, GPIO.LOW)
+        GPIO.output(GREEN_PIN, GPIO.LOW)
+        GPIO.output(BLUE_PIN, GPIO.HIGH)
     def yellow():
-        GPIO.output(RED_PIN, GPIO.HIGH); GPIO.output(GREEN_PIN, GPIO.HIGH); GPIO.output(BLUE_PIN, GPIO.LOW)
+        GPIO.output(RED_PIN, GPIO.HIGH)
+        GPIO.output(GREEN_PIN, GPIO.HIGH)
+        GPIO.output(BLUE_PIN, GPIO.LOW)
     def purple():
-        GPIO.output(RED_PIN, GPIO.HIGH); GPIO.output(GREEN_PIN, GPIO.LOW); GPIO.output(BLUE_PIN, GPIO.HIGH)
+        GPIO.output(RED_PIN, GPIO.HIGH)
+        GPIO.output(GREEN_PIN, GPIO.LOW)
+        GPIO.output(BLUE_PIN, GPIO.HIGH)
     def lightBlue():
-        GPIO.output(RED_PIN, GPIO.LOW); GPIO.output(GREEN_PIN, GPIO.HIGH); GPIO.output(BLUE_PIN, GPIO.HIGH)
+        GPIO.output(RED_PIN, GPIO.LOW)
+        GPIO.output(GREEN_PIN, GPIO.HIGH)
+        GPIO.output(BLUE_PIN, GPIO.HIGH)
 
     sequence = [
         (turnOff, "OFF"), (white, "WHITE"), (red, "RED"), (green, "GREEN"),

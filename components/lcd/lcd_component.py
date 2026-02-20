@@ -29,8 +29,8 @@ def get_cpu_temp():
         return "0.00 C"
 
 def run_lcd_real(callback, stop_event, code, settings, device_info):
-    from PCF8574 import PCF8574_GPIO
-    from Adafruit_LCD1602 import Adafruit_CharLCD
+    from .PCF8574 import PCF8574_GPIO
+    from .Adafruit_LCD1602 import Adafruit_CharLCD
     from datetime import datetime
 
     address = 0x27
