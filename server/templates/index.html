@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <title>IoT Dashboard - Multi-PI</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; }
+        h1 { text-align: center; color: #1a73e8; }
+
+        /* Stilovi za Tabove */
+        .tab-menu { display: flex; justify-content: center; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab-btn { padding: 10px 30px; cursor: pointer; border: none; background: none; font-size: 18px; font-weight: bold; color: #5f6368; transition: 0.3s; }
+        .tab-btn:hover { color: #1a73e8; }
+        .tab-btn.active { color: #1a73e8; border-bottom: 3px solid #1a73e8; }
+
+        /* Sadržaj taba */
+        .tab-content { display: none; animation: fadeEffect 0.5s; }
+        @keyframes fadeEffect { from {opacity: 0;} to {opacity: 1;} }
+        .active-content { display: block; }
+
+        /* Kartice za grafikone */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card h3 { margin-top: 0; color: #3c4043; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+        iframe { width: 100%; height: 250px; border: none; border-radius: 8px; }
+
+        .info-bar { margin-top: 30px; text-align: center; font-size: 0.9em; color: #70757a; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Smart Home IoT Dashboard</h1>
+
+    <div class="tab-menu">
+        <button class="tab-btn active" onclick="openPi(event, 'pi1')">Raspberry Pi 1</button>
+        <button class="tab-btn" onclick="openPi(event, 'pi2')">Raspberry Pi 2</button>
+        <button class="tab-btn" onclick="openPi(event, 'pi3')">Raspberry Pi 3</button>
+    </div>
+
+    <div id="pi1" class="tab-content active-content">
+        <div class="grid">
+            <div class="card">
+                <h3>DPIR1 - Detekcija pokreta, broj ljudi: {{ people_count_pi1 }}</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=2" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DUS1 - Senzor vrata</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=3" width="450" height="200" frameborder="0"></iframe></div>
+            <div class="card">
+                <h3>DL - Dioda</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=4" width="450" height="200" frameborder="0"></iframe>            </div>
+            <div class="card">
+                <h3>DS1 - Senzor(dugme) vrata</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=5" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DMS1 - Detekcija pritiska tastera</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=6" width="450" height="200" frameborder="0"></iframe>
+                </div>
+            <div class="card">
+                <h3>DB1 - Bazer za vrata</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=7" width="450" height="200" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="pi2" class="tab-content">
+        <div class="grid">
+            <div class="card">
+                <h3>DS2 - Senzor(dugme) vrata</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=1" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DUS2 - Senzor vrata</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=8" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DPIR2 - Detekcija pokreta</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=9" width="450" height="200" frameborder="0"></iframe>            </div>
+            <div class="card">
+                <h3>4SG - 7-segmentni ekran</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=10" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>BTN - Dugme za kuhinjska vrata</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=11" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DHT3 - Senzor za vlaznost i temperaturu u kuhinji</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=12" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>GSG - Ziroskop u kuhinji</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=13" width="450" height="200" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="pi3" class="tab-content">
+        <div class="grid">
+            <div class="card">
+                <h3>DHT1 - Temperatura i vlažnost velike spavace sobe</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=14" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DHT2 - Temperatura i vlažnost spavace sobe</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=15" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DPIR3 - Detekcija pokreta u dnevnoj sobi</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=16" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>BRGB - Boja u spavacoj sobi</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=17" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>LCD - LCD ekran u dnevnom boravku</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=18" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>IR - Infrared u spavacoj sobi</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=19" width="450" height="200" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-bar">
+        Status: <span style="color: {{ curr_color }}">● {{ status }}</span> |
+        MQTT Broker: <strong>{{ mqtt_status }}</strong> |
+        Organizacija: <strong>{{ org_name }}</strong>
+    </div>
+</div>
+
+<script>
+    function openPi(evt, piName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(piName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+</body>
+</html>
