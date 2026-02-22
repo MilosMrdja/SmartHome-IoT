@@ -53,12 +53,12 @@ if __name__ == "__main__":
 
     # 2. Pokretanje senzora za odredjeni PI
     if settings["device_info"]["pi_id"] == "PI1" :
-        run_ds1(settings['DS1'], threads, stop_event, device_info) # vezbe 2
-        run_dl(settings['DL'], threads, stop_event, device_info) # vezbe 1
+        #run_ds1(settings['DS1'], threads, stop_event, device_info) # vezbe 2
+        #run_dl(settings['DL'], threads, stop_event, device_info) # vezbe 1
         run_dus1(settings['DUS1'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
-        run_db(settings['DB'], threads, stop_event, device_info) # vezbe 2
+        #run_db(settings['DB'], threads, stop_event, device_info) # vezbe 2
         run_dpir1(settings['DPIR1'], threads, stop_event, device_info) # vezbe 2
-        run_dms(settings['DMS'], threads, stop_event, device_info) # vezbe 4
+        #run_dms(settings['DMS'], threads, stop_event, device_info) # vezbe 4
         # run_webc(settings['WEBC'],threads, stop_event, device_info)
         # export http_proxy="http://proxy.uns.ac.rs:8080"
         # export https_proxy="http://proxy.uns.ac.rs:8080"

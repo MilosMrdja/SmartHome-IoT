@@ -36,6 +36,8 @@ def handle_vars(payload):
         global people_count
         if payload['people_count']:
             people_count += 1
+        elif people_count is None:
+            pass
         else:
             if people_count > 0:
                 people_count -= 1
