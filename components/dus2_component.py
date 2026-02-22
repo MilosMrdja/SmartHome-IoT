@@ -2,6 +2,7 @@ import threading
 import time
 from common.locks import print_lock
 from common.mqqt_sender import batch_queue
+from scripts.people_counter import update_distance
 from simulators.dus2_simulator import run_dus2_simulator
 
 
@@ -14,6 +15,7 @@ def dus2_callback(distance, code, device_info, settings):
         "value": distance,
         "simulated": settings['simulated'] 
     }
+    update_distance(sensor_id=2, distance=distance)
     batch_queue.put(payload) 
     print(f"[{code}] Sent to buffer: ultrasonic sensor 2 detected")
 

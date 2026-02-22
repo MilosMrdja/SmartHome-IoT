@@ -1,21 +1,37 @@
 import random
 import time
 
-def generate_dus2_distance(closed_distance=5, open_distance=100, noise=2, open_prob=0.1, close_prob=0.6):
-    door_closed = True
+def generate_dus2_distance(
+    far_distance=100,
+    near_distance=5,
+    step=15,
+    noise=2,
+    event_probability=0.05
+):
+    state = "idle"
+    current_distance = far_distance
 
     while True:
-        if door_closed:
-            
-            if random.random() < open_prob:
-                door_closed = False
-        else:
-            
-            if random.random() < close_prob:
-                door_closed = True
+        if state == "idle" and random.random() < event_probability:
+            state = random.choice(["entering", "exiting"])
+            if state == "entering":
+                current_distance = far_distance
+            else:
+                current_distance = near_distance
 
-        base = closed_distance if door_closed else open_distance
-        yield base + random.randint(-noise, noise)
+        elif state == "entering":
+            current_distance -= step
+            if current_distance <= near_distance:
+                state = "idle"
+                current_distance = far_distance
+
+        elif state == "exiting":
+            current_distance += step
+            if current_distance >= far_distance:
+                state = "idle"
+                current_distance = far_distance
+
+        yield current_distance + random.randint(-noise, noise)
 
 def run_dus2_simulator(delay, callback, stop_event, code):
     for distance in generate_dus2_distance():

@@ -6,7 +6,7 @@ from common.locks import print_lock
 from common.mqqt_sender import batch_queue
 
 def dpir1_callback(code, device_info, settings):
-    motion = process_motion(sensor_id=1, device_info = device_info)
+    motion = process_motion(sensor_id=1)
     payload = {
         "measurement": "door pir 1",
         "device_name": device_info['device_name'],

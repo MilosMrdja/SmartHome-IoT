@@ -16,8 +16,6 @@ def generate_dus1_distance(
     current_distance = far_distance
 
     while True:
-
-        # POKRETANJE DOGAĐAJA
         if state == "idle" and random.random() < event_probability:
             state = random.choice(["entering", "exiting"])
             if state == "entering":
@@ -25,14 +23,12 @@ def generate_dus1_distance(
             else:
                 current_distance = near_distance
 
-        # ULASAK (distance opada)
         elif state == "entering":
             current_distance -= step
             if current_distance <= near_distance:
                 state = "idle"
                 current_distance = far_distance
 
-        # IZLAZAK (distance raste)
         elif state == "exiting":
             current_distance += step
             if current_distance >= far_distance:

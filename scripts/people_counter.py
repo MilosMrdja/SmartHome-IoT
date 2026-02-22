@@ -11,9 +11,6 @@ def update_distance(sensor_id, distance):
         distance_history_1.append((time.time(), distance))
     elif sensor_id == 2:
         distance_history_2.append((time.time(), distance))
-    print(distance_history_1)
-    print(distance_history_2)
-
 
 def detect_direction(history):
     if len(history) < 3:
@@ -30,9 +27,8 @@ def detect_direction(history):
     return None
 
 
-def process_motion(sensor_id, device_info):
+def process_motion(sensor_id):
     global people_count
-
     if sensor_id == 1:
         direction = detect_direction(distance_history_1)
     else:
