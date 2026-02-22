@@ -17,6 +17,7 @@ write_api = influx_client.write_api(write_options=SYNCHRONOUS)
 
 # VAR
 mqtt_connected = False
+people_count = 0
 
 # --- MQTT CALLBACKS ---
 def on_connect(client, userdata, flags, rc):
@@ -29,20 +30,76 @@ def on_connect(client, userdata, flags, rc):
         print("Connection failed")
     client.subscribe(MQTT_TOPIC)
 
+def handle_vars(payload):
+
+    if payload['code'] == 'DPIR1':
+        global people_count
+        if payload['people_count']:
+            people_count += 1
+        else:
+            if people_count > 0:
+                people_count -= 1
+
+def handle_val(payload):
+    if payload['code'] == 'DHT3' or payload['code'] == 'DHT2' or payload['code'] == 'DHT1':
+        point = (
+            Point(payload['measurement'])
+            .tag("code", payload['code'])
+            .tag("pi_id", payload['pi_id'])
+            .tag("device_name", payload['device_name'])
+            .tag("simulated", str(payload['simulated']))
+            .field("temperature", payload['temperature'])
+            .field("humidity", payload['humidity'])
+        )
+    elif payload['code'] == 'GSG':
+        point = (
+            Point(payload['measurement'])
+            .tag("code", payload['code'])
+            .tag("pi_id", payload['pi_id'])
+            .tag("device_name", payload['device_name'])
+            .tag("simulated", str(payload['simulated']))
+            .field("accel_x", payload['accel'][0])
+            .field("accel_y", payload['accel'][1])
+            .field("accel_z", payload['accel'][2])
+            .field("gyro_x", payload['gyro'][0])
+            .field("gyro_y", payload['gyro'][1])
+            .field("gyro_z", payload['gyro'][2])
+        )
+    elif payload['code'] == 'LCD':
+        point = (
+            Point(payload['measurement'])
+            .tag("code", payload['code'])
+            .tag("pi_id", payload['pi_id'])
+            .tag("device_name", payload['device_name'])
+            .tag("simulated", str(payload['simulated']))
+            .field("line1", payload['line1'])
+            .field("line2", payload['line1'])
+        )
+
+    else:
+        point = (
+            Point(payload['measurement'])
+            .tag("code", payload['code'])
+            .tag("pi_id", payload['pi_id'])
+            .tag("device_name", payload['device_name'])
+            .tag("simulated", str(payload['simulated']))
+            .field("value", payload['value'])
+        )
+
+    return point
+
 def on_message(client, userdata, msg):
     print("RAW MQTT:", msg.topic, msg.payload.decode())
     try:
         data_list = json.loads(msg.payload.decode())
         for data in data_list:
-            # Kreiraj InfluxDB Point
-            point = (
-                Point(data['measurement'])
-                .tag("code", data['code'])
-                .tag("pi_id", data['pi_id'])
-                .tag("device_name", data['device_name'])
-                .tag("simulated", str(data['simulated']))
-                .field("value", data['value']) #TODO izmeniti za dms
-            )
+
+            # Proveri sva stanja
+            handle_vars(data)
+
+            # Napravi dobar point
+            point = handle_val(data)
+
             write_api.write(bucket=INFLUX_BUCKET, record=point)
             print(f"Saved to Influx: {data}\n")
     except Exception as e:
@@ -62,9 +119,10 @@ def index():
 
     return render_template('index.html',
                            status=status_text,
-                           color=status_color,
+                           curr_color=status_color,
                            mqtt_status=mqtt_info,
                            mqtt_broker=MQTT_BROKER,
+                           people_count_pi1=people_count,
                            org_name=INFLUX_ORG)
 
 

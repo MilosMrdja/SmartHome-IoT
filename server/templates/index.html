@@ -43,7 +43,7 @@
     <div id="pi1" class="tab-content active-content">
         <div class="grid">
             <div class="card">
-                <h3>DPIR1 - Detekcija pokreta</h3>
+                <h3>DPIR1 - Detekcija pokreta, broj ljudi: {{ people_count_pi1 }}</h3>
                 <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=2" width="450" height="200" frameborder="0"></iframe>
             </div>
             <div class="card">
@@ -53,7 +53,7 @@
                 <h3>DL - Dioda</h3>
                 <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=4" width="450" height="200" frameborder="0"></iframe>            </div>
             <div class="card">
-                <h3>DS1 - Dugme za vrata</h3>
+                <h3>DS1 - Senzor(dugme) vrata</h3>
                 <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=5" width="450" height="200" frameborder="0"></iframe>
             </div>
             <div class="card">
@@ -63,14 +63,38 @@
             <div class="card">
                 <h3>DB1 - Bazer za vrata</h3>
                 <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=7" width="450" height="200" frameborder="0"></iframe>
-                </div>
+            </div>
+        </div>
     </div>
 
     <div id="pi2" class="tab-content">
         <div class="grid">
             <div class="card">
-                <h3>DS2 - Senzor vrata</h3>
-                <iframe src="http://localhost:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=2&from=now-1h&to=now&refresh=5s"></iframe>
+                <h3>DS2 - Senzor(dugme) vrata</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=1" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DUS2 - Senzor vrata</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=8" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DPIR2 - Detekcija pokreta</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=9" width="450" height="200" frameborder="0"></iframe>            </div>
+            <div class="card">
+                <h3>4SG - 7-segmentni ekran</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=10" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>BTN - Dugme za kuhinjska vrata</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=11" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>DHT3 - Senzor za vlaznost i temperaturu u kuhinji</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=12" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>GSG - Ziroskop u kuhinji</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=13" width="450" height="200" frameborder="0"></iframe>
             </div>
         </div>
     </div>
@@ -78,22 +102,34 @@
     <div id="pi3" class="tab-content">
         <div class="grid">
             <div class="card">
-                <h3>DHT1 - Temperatura i vlažnost</h3>
-                <iframe src="http://localhost:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=3&from=now-1h&to=now&refresh=5s"></iframe>
+                <h3>DHT1 - Temperatura i vlažnost velike spavace sobe</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=14" width="450" height="200" frameborder="0"></iframe>
             </div>
             <div class="card">
-                <h3>DHT2 - Temperatura i vlažnost</h3>
-                <iframe src="http://localhost:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=4&from=now-1h&to=now&refresh=5s"></iframe>
+                <h3>DHT2 - Temperatura i vlažnost spavace sobe</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=15" width="450" height="200" frameborder="0"></iframe>
             </div>
             <div class="card">
-                <h3>DPIR3 - Detekcija pokreta</h3>
-                <iframe src="http://localhost:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=5&from=now-1h&to=now&refresh=5s"></iframe>
+                <h3>DPIR3 - Detekcija pokreta u dnevnoj sobi</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=16" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>BRGB - Boja u spavacoj sobi</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=17" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>LCD - LCD ekran u dnevnom boravku</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=18" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="card">
+                <h3>IR - Infrared u spavacoj sobi</h3>
+                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=19" width="450" height="200" frameborder="0"></iframe>
             </div>
         </div>
     </div>
 
     <div class="info-bar">
-        Status: <span style="color: {{ color }}">● {{ status }}</span> |
+        Status: <span style="color: {{ curr_color }}">● {{ status }}</span> |
         MQTT Broker: <strong>{{ mqtt_status }}</strong> |
         Organizacija: <strong>{{ org_name }}</strong>
     </div>

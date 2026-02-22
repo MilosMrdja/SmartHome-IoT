@@ -11,7 +11,8 @@ def dpir1_callback(code, device_info, settings):
         "pi_id": device_info['pi_id'],
         "code": code,
         "value": 1,
-        "simulated": settings['simulated'] 
+        "simulated": settings['simulated'],
+        "people_count": True
     }
     batch_queue.put(payload) 
     print(f"[{code}] Sent to buffer: motion detected")

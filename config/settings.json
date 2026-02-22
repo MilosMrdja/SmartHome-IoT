@@ -1,10 +1,10 @@
 {
   "device_info": {
-    "pi_id": "PI1",
-    "device_name": "Gate_Control_Unit_1"
+    "pi_id": "PI3",
+    "device_name": "Gate_Control_Unit_3"
   },
   "mqtt": {
-    "broker_hostname": "192.168.0.102",
+    "broker_hostname": "192.168.0.103",
     "port": 1883,
     "topic": "iot/pi1/batch"
   },
@@ -46,8 +46,8 @@
     "code": "DB",
     "simulated": true,
     "delay" : 10,
-    "duration": 0.1,
-    "pitch": 10000,
+    "duration": 1,
+    "pitch": 100,
     "pin": 17
   },
   "DS2": {
