@@ -7,8 +7,18 @@ services:
       - 3000:3000
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      # --- KLJUČNA LINIJA KOJA JE NEDOSTAJALA ---
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      # -----------------------------------------
+      - GF_AUTH_ANONYMOUS_ORG_NAME=docs  # Promenjeno na 'docs' da se slaže sa Influxom
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_PANELS_DISABLE_SANITIZE_HTML=true
+      - GF_SECURITY_COOKIE_SAMESITE=none
+      - GF_SECURITY_COOKIE_SECURE=false
     volumes:
       - grafana-data:/var/lib/grafana
+    restart: unless-stopped
   mosquitto:
     image: eclipse-mosquitto:2
     container_name: mqtt5
