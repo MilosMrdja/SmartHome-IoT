@@ -1,19 +1,23 @@
 import threading
 import time
+from scripts.people_counter import process_motion
 from simulators.dpir1_simulator import run_dpir1_simulator
 from common.locks import print_lock
 from common.mqqt_sender import batch_queue
 
 def dpir1_callback(code, device_info, settings):
+    motion = process_motion(sensor_id=1, device_info = device_info)
     payload = {
         "measurement": "door pir 1",
         "device_name": device_info['device_name'],
         "pi_id": device_info['pi_id'],
         "code": code,
         "value": 1,
-        "simulated": settings['simulated'] 
+        "simulated": settings['simulated'],
+        "people_count": motion
     }
     batch_queue.put(payload) 
+    print(payload)
     print(f"[{code}] Sent to buffer: motion detected")
 
 def run_dpir1(settings, threads, stop_event, device_info):

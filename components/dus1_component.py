@@ -3,6 +3,7 @@ import time
 from simulators.dus1_simulator import run_dus1_simulator
 from common.locks import print_lock
 from common.mqqt_sender import batch_queue
+from scripts.people_counter import update_distance
 
 
 def dus1_callback(distance, code, device_info, settings):
@@ -15,7 +16,8 @@ def dus1_callback(distance, code, device_info, settings):
         "simulated": settings['simulated'] 
     }
     batch_queue.put(payload) 
-    print(f"[{code}] Sent to buffer: ultrasonic sensor detected")
+    update_distance(sensor_id=1, distance=distance)
+    print(f"[{code}] Sent to buffer: ultrasonic sensor detected distance")
 
 def run_dus1(settings, threads, stop_event, device_info):
     if settings['simulated']:
