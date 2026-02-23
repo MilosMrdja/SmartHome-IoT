@@ -3,8 +3,19 @@ import time
 from common.locks import print_lock
 from common.mqqt_sender import batch_queue
 from simulators.gsg_simulator import run_gsg_simulator
+from scripts.alarm import turn_alarm_on
 
 def gsg_callback(code, device_info, settings, accel, gyro):
+    accel_threshold = 0.5
+    gyro_threshold = 20.0
+    
+    significant_move = any(abs(a) > accel_threshold for a in accel[:2]) or \
+                       abs(accel[2] - 1.0) > accel_threshold or \
+                       any(abs(g) > gyro_threshold for g in gyro)
+
+    if significant_move:
+        turn_alarm_on(device_info=device_info, settings=settings)
+
     payload = {
         "measurement": "gyroscope",
         "device_name": device_info['device_name'],
@@ -14,8 +25,8 @@ def gsg_callback(code, device_info, settings, accel, gyro):
         "gyro": gyro,
         "simulated": settings['simulated'] 
     }
+    print(payload)
     batch_queue.put(payload) 
-    print(f"[{device_info['device_name']}] Sent to buffer: Accel:{accel}, Gyro:{gyro}")
 
 
 def real_gsg_loop(settings, stop_event, device_info):
@@ -32,15 +43,13 @@ def real_gsg_loop(settings, stop_event, device_info):
         gyro = [round(g / 131.0, 3) for g in gyro_raw]
         
         gsg_callback(code, device_info, settings, accel, gyro)
-        
         time.sleep(settings.get('delay', 0.5))
 
 
 def run_gsg(settings, threads, stop_event, device_info):
     if settings['simulated']:
         code = settings['code']
-        print(f'Starting {code} simulator')
-        dpir1_thread = threading.Thread(
+        gsg_thread = threading.Thread(
             target=run_gsg_simulator, 
             args=(
                 settings['delay'], 
@@ -49,13 +58,9 @@ def run_gsg(settings, threads, stop_event, device_info):
                 code
             )
         )
-        dpir1_thread.start()
-        threads.append(dpir1_thread)
-        print(f"{code} simulator started")
+        gsg_thread.start()
+        threads.append(gsg_thread)
     else:
-        print(f"Starting {device_info['device_name']} real sensor")
         gsg_thread = threading.Thread(target=real_gsg_loop, args=(settings, stop_event, device_info))
         gsg_thread.start()
         threads.append(gsg_thread)
-        print("GSG real sensor started")
-

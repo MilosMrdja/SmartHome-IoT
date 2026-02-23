@@ -4,9 +4,11 @@ from scripts.people_counter import process_motion
 from simulators.dpir1_simulator import run_dpir1_simulator
 from common.locks import print_lock
 from common.mqqt_sender import batch_queue
+from components.dl_component import turn_on_dl_logic
 
 def dpir1_callback(code, device_info, settings):
     motion = process_motion(sensor_id=1)
+    turn_on_dl_logic()
     payload = {
         "measurement": "door pir 1",
         "device_name": device_info['device_name'],
