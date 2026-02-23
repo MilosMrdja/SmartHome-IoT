@@ -1,5 +1,5 @@
 # --- KONFIGURACIJA ---
-MQTT_BROKER = "192.168.0.103"   # LAN IP Windows mašine ili 'mqtt5' ako je Docker
+MQTT_BROKER = "192.168.64.109"   # LAN IP Windows mašine ili 'mqtt5' ako je Docker
 MQTT_TOPIC = "iot/+/batch"
 
 INFLUX_URL = "http://localhost:8086"

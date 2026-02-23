@@ -30,9 +30,17 @@ def on_connect(client, userdata, flags, rc):
         print("Connection failed")
     client.subscribe(MQTT_TOPIC)
 
-def handle_vars(payload):
-
-    if payload['code'] == 'DPIR1':
+def handle_vars(payload, client):
+    if payload["measurement"] == "alarm_events":
+        command = {
+                    "command": "",
+                }
+        if payload["value"] == 1:
+            command['command'] = "ON"
+        else:
+            command['command'] = "OFF"
+        client.publish("commands/alarm", json.dumps(command))
+    if payload['code'] == 'DPIR1' or payload['code'] == 'DPIR2':
         global people_count
         if payload['people_count']:
             people_count += 1
@@ -41,6 +49,12 @@ def handle_vars(payload):
         else:
             if people_count > 0:
                 people_count -= 1
+            else:
+                command = {
+                        "command": "ON",
+                        "reason": f"Motion detected by {payload['code']} while house empty"
+                    }
+                client.publish("commands/alarm", json.dumps(command))
 
 def handle_val(payload):
     if payload['code'] == 'DHT3' or payload['code'] == 'DHT2' or payload['code'] == 'DHT1':
@@ -75,7 +89,7 @@ def handle_val(payload):
             .tag("device_name", payload['device_name'])
             .tag("simulated", str(payload['simulated']))
             .field("line1", payload['line1'])
-            .field("line2", payload['line1'])
+            .field("line2", payload['line2'])
         )
 
     else:
@@ -97,7 +111,7 @@ def on_message(client, userdata, msg):
         for data in data_list:
 
             # Proveri sva stanja
-            handle_vars(data)
+            handle_vars(data, client)
 
             # Napravi dobar point
             point = handle_val(data)
