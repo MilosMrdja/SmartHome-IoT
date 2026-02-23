@@ -28,6 +28,7 @@ def turn_on_dl_logic():
             set_led_state(True)
         else:
             import RPi.GPIO as GPIO
+            GPIO.setup(_settings['pin'], GPIO.OUT)
             GPIO.output(_settings['pin'], GPIO.HIGH)
         
         dl_callback(True, _settings['code'], _settings, _device_info)

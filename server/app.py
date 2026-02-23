@@ -17,7 +17,7 @@ write_api = influx_client.write_api(write_options=SYNCHRONOUS)
 
 # VAR
 mqtt_connected = False
-people_count = 0
+people_count = 20
 
 # --- MQTT CALLBACKS ---
 def on_connect(client, userdata, flags, rc):

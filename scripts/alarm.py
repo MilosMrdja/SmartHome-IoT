@@ -19,7 +19,8 @@ def turn_alarm_on(device_info, settings):
             "measurement": "alarm_events",
             "device_name": device_info['device_name'],
             "pi_id": device_info['pi_id'],
-            "reason": settings["code"],
+            "code": settings["code"],
+            "simulated" : device_info['simulated'],
             "value": 1
         }
         print(payload)
@@ -36,7 +37,8 @@ def turn_alarm_off(device_info):
             "measurement": "alarm_events",
             "device_name": device_info['device_name'],
             "pi_id": device_info['pi_id'],
-            "reason": "PIN_OR_WEB_DEACTIVATION",
+            "code": "PIN_OR_WEB_DEACTIVATION",
+            "simulated" : device_info['simulated'],
             "value": 0 
         }
         batch_queue.put(payload)
