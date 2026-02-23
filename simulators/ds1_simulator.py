@@ -14,6 +14,7 @@ def generate_ds1_state():
 
 def run_ds1_simulator(delay, callback, stop_event, code, device_info, settings):
     open_start_time = None
+    last_state = None
 
     for is_open in generate_ds1_state():
         if stop_event.is_set():
@@ -27,9 +28,13 @@ def run_ds1_simulator(delay, callback, stop_event, code, device_info, settings):
             
             if current_time - open_start_time > 5:
                 turn_alarm_on(device_info=device_info, settings=settings)
-                callback(code, device_info, settings, 1 if is_open else 0)
         else:
             open_start_time = None
             turn_alarm_off(device_info=device_info)
+
+        if is_open != last_state:
             callback(code, device_info, settings, 1 if is_open else 0)
+            last_state = is_open
+            print(f"[{code}] State changed to: {'OPEN' if is_open else 'CLOSED'}")
+
         time.sleep(delay)

@@ -1,7 +1,7 @@
 import threading
 import time
 from common.mqqt_sender import batch_queue
-from components.db_component import run_db
+from simulators.db_simulator import set_buzzer_state
 
 is_alarm_active = False
 
@@ -9,6 +9,7 @@ def turn_alarm_on(device_info, settings):
     global is_alarm_active
     if not is_alarm_active:
         is_alarm_active = True
+        set_buzzer_state(True)
         print(f"!!! ALARM WAS ACTIVATED!!!")
         
         payload = {
@@ -25,6 +26,7 @@ def turn_alarm_off(device_info):
     global is_alarm_active
     if is_alarm_active:
         is_alarm_active = False
+        set_buzzer_state(False)
         print("ALARM WAS DEACTIVATED")
         
         payload = {
