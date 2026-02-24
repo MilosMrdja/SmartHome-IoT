@@ -8,8 +8,8 @@ from simulators.lcd_simulator import set_lcd_state
 
 def dht1_callback(code, device_info, settings, temperature, humidity):
     
-    line1 = f"Temp: {temperature} C"
-    line2 = f"Hum:  {humidity} %"
+    line1 = f"Temp1: {temperature} C"
+    line2 = f"Hum1:  {humidity} %"
     
     try:
         set_lcd_state(line1, line2)

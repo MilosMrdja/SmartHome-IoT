@@ -23,9 +23,8 @@ people_count = 0
 HOME_PIN = "1234"
 CURRENT_PIN = ""
 ALARM_TRIGGERED = False # alarm radi
-ALARM_ACTIVATED = False # alarm je spreman za rad
-people_coint_2 = 0
-people_coint_3 = 0
+ALARM_ACTIVATED = True # alarm je spreman za rad
+
 
 # --- MQTT CALLBACKS ---
 def on_connect(client, userdata, flags, rc):
@@ -46,11 +45,11 @@ def handle_vars(payload, client):
             alarm(client=client,state= False)
     elif payload['code'] == 'DPIR1' or payload['code'] == 'DPIR2':
         global people_count
-        if payload['people_count']:
+        if payload['people_count'] is True:
             people_count += 1
         elif people_count is None:
             pass
-        else:
+        elif payload['people_count'] is False :
             if people_count > 0:
                 people_count -= 1
             else:
@@ -112,7 +111,7 @@ def alarm(client, state = True):
         
 
 def handle_val(payload):
-    if payload['code'] == 'DHT3' or payload['code'] == 'DHT2' or payload['code'] == 'DHT1':
+    if (payload['code'] == 'DHT3' or payload['code'] == 'DHT2' or payload['code'] == 'DHT1') and payload['measurement'] != "alarm_events":
         point = (
             Point(payload['measurement'])
             .tag("code", payload['code'])
@@ -122,7 +121,7 @@ def handle_val(payload):
             .field("temperature", payload['temperature'])
             .field("humidity", payload['humidity'])
         )
-    elif payload['code'] == 'GSG':
+    elif payload['code'] == 'GSG' and payload['measurement'] != "alarm_events":
         point = (
             Point(payload['measurement'])
             .tag("code", payload['code'])
@@ -136,7 +135,7 @@ def handle_val(payload):
             .field("gyro_y", payload['gyro'][1])
             .field("gyro_z", payload['gyro'][2])
         )
-    elif payload['code'] == 'LCD':
+    elif payload['code'] == 'LCD' and payload['measurement'] != "alarm_events":
         point = (
             Point(payload['measurement'])
             .tag("code", payload['code'])
@@ -224,10 +223,10 @@ def index():
 def toggle_alarm():
     global ALARM_TRIGGERED, CURRENT_PIN
     if ALARM_TRIGGERED:
-        ALARM_TRIGGERED = False
         CURRENT_PIN = ""
         alarm(mqtt_client,state=False)
         print("ALARM DEAKTIVIRAN PREKO DASHBOARDA")
+        ALARM_TRIGGERED = False
         return jsonify({"activated": False, "status": "detriggered"})
     return jsonify({"activated": False, "status": "no_trigger_active"})
 

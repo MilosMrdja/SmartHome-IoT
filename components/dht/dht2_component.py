@@ -7,8 +7,8 @@ from simulators.lcd_simulator import set_lcd_state
 
 
 def dht2_callback(code, device_info, settings, temperature, humidity):
-    line1 = f"Temp: {temperature} C"
-    line2 = f"Hum:  {humidity} %"
+    line1 = f"Temp2: {temperature} C"
+    line2 = f"Hum2:  {humidity} %"
     
     try:
         set_lcd_state(line1, line2)
@@ -16,7 +16,7 @@ def dht2_callback(code, device_info, settings, temperature, humidity):
         print(f"LCD not initialized yet: {e}")
 
     payload = {
-        "measurement": "Bedroom_DHT",
+        "measurement": "Master_Bedroom_DHT",
         "device_name": device_info['device_name'],
         "pi_id": device_info['pi_id'],
         "code": code,
