@@ -68,6 +68,11 @@
     </div>
 
     <div id="pi2" class="tab-content">
+        <div class="card">
+            <h3>Kontrola 7-Segmentnog ekrana</h3>
+            <input type="text" id="displayInput" placeholder="Unesi 4 cifre" maxlength="4">
+            <button onclick="sendToDisplay()">Prikaži na satu</button>
+        </div>
         <div class="grid">
             <div class="card">
                 <h3>DS2 - Senzor(dugme) vrata</h3>
@@ -180,6 +185,14 @@
                 statusEl.style.color = "red";
             });
     }
+    function sendToDisplay() {
+    const val = document.getElementById('displayInput').value;
+    if(val.length !== 4) { alert("Unesi 4 broja!"); return; }
+    
+    fetch('/update-display/' + val)
+        .then(res => res.text())
+        .then(data => alert(data));
+    }      
 </script>
 
 </body>

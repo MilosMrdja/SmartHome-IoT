@@ -80,14 +80,14 @@
   "BTN": {
     "simulated": true,
     "pin": 18,
-    "delay": 2,
+    "delay": 10,
     "code": "BTN"
   },
   "DHT3": {
     "code": "DHT3",
     "simulated": true,
     "pin": 17,
-    "delay": 2
+    "delay": 10
   },
   "GSG": {
     "code": "GSG",
@@ -99,13 +99,13 @@
     "code": "DHT1",
     "simulated": true,
     "pin": 17,
-    "delay": 2
+    "delay": 13
   },
   "DHT2": {
     "code": "DHT2",
     "simulated": true,
     "pin": 17,
-    "delay": 2
+    "delay": 11
   },
   "DPIR3": {
     "simulated": true,

@@ -26,6 +26,7 @@ from components.dl_component import run_dl
 from components.dpir1_component import run_dpir1
 from components.dms_component import run_dms
 from components.db_component import run_db
+from scripts._4sd_listener import run_display_listener
 from scripts.alarm import run_alarm_listener
 from scripts.ir_remote_listener import run_ir_remote_listener
 
@@ -76,26 +77,34 @@ if __name__ == "__main__":
         # mjpg_streamer -i "input_uvc.so" -o "output_http.so -p 8080 -w /usr/local/share/mjpg-streamer/www"
         # http://<raspberry_pi_ip>:8080/?action=stream
     elif settings["device_info"]["pi_id"] == "PI2":
-        run_ds2(settings['DS2'], threads, stop_event, device_info)
-        run_dus2(settings['DUS2'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
-        run_dpir2(settings['DPIR2'], threads, stop_event, device_info) # vezbe 2
+        
+        listener_thread = threading.Thread(
+            target=run_display_listener, 
+            args=(device_info, mqtt_settings),
+            daemon=True
+        )
+        listener_thread.start()
+        threads.append(listener_thread)
+        #run_ds2(settings['DS2'], threads, stop_event, device_info)
+        #run_dus2(settings['DUS2'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
+        #run_dpir2(settings['DPIR2'], threads, stop_event, device_info) # vezbe 2
         run_4sd(settings['4SD'], threads, stop_event, device_info) # vezbe 4 # nece biti
         run_btn(settings['BTN'], threads, stop_event, device_info)
-        run_dht3(settings['DHT3'], threads, stop_event, device_info) # vezbe 3
-        run_gsg(settings['GSG'], threads, stop_event, device_info) # vezbe 6
+        #run_dht3(settings['DHT3'], threads, stop_event, device_info) # vezbe 3
+        #run_gsg(settings['GSG'], threads, stop_event, device_info) # vezbe 6
     elif settings["device_info"]["pi_id"] == "PI3":
-        alarm_listener_thread = threading.Thread(
+        listener_thread = threading.Thread(
             target=run_ir_remote_listener, 
             args=(device_info, mqtt_settings),
             daemon=True
         )
-        alarm_listener_thread.start()
-        threads.append(alarm_listener_thread)
-        #run_dht1(settings['DHT1'], threads, stop_event, device_info) # vezbe 3
+        listener_thread.start()
+        threads.append(listener_thread)
+        run_dht1(settings['DHT1'], threads, stop_event, device_info) # vezbe 3
         #run_dht2(settings['DHT2'], threads, stop_event, device_info) # vezbe 3
         #run_ir(settings['IR'], threads, stop_event, device_info) # vezbe 5
-        run_brgb(settings['BRGB'], threads, stop_event, device_info) # vezbe 4 # otpornici 220 oma # ne ide na 3.3v nego na ground
-        #run_lcd(settings['LCD'], threads, stop_event, device_info) # vezbe 3
+        #run_brgb(settings['BRGB'], threads, stop_event, device_info) # vezbe 4 # otpornici 220 oma # ne ide na 3.3v nego na ground
+        run_lcd(settings['LCD'], threads, stop_event, device_info) # vezbe 3
         #run_dpir3(settings['DPIR3'], threads, stop_event, device_info) # vezbe 2
 
 

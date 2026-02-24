@@ -141,6 +141,17 @@ def simulate_ir():
         return f"Poslata komanda za dugme: {button}", 200
     return "MQTT nije povezan", 500
 
+@app.route('/update-display/<value>')
+def update_display(value):
+    if len(value) != 4 or not value.isdigit():
+        return "Mora biti tačno 4 cifre", 400
+    
+    if mqtt_connected:
+        payload = {"command": "SET_DISPLAY", "value": value}
+        mqtt_client.publish("commands/pi2/4sd", json.dumps(payload))
+        return f"Poslato na displej: {value}", 200
+    return "MQTT nije povezan", 500
+
 @app.route('/')
 def index():
     status_text = "Online" if mqtt_connected else "Offline"

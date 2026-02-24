@@ -1,7 +1,7 @@
 import threading
 import time
 from common.mqqt_sender import batch_queue
-from simulators._4sd_simulator import *
+from simulators._4sd_simulator import set_4sd_state, get_4sd_state, run_4sd_simulator
 
 def _4sd_callback(value, code, settings, device_info):
     payload = {
@@ -13,7 +13,7 @@ def _4sd_callback(value, code, settings, device_info):
         "simulated": settings['simulated']
     }
     batch_queue.put(payload)
-    print(f"[{code}] Display updated: {value}")
+    print(f"[{code}] InfluxDB Update: {value}")
 
 def run_4sd_real(callback, stop_event, code, settings, device_info):
     import RPi.GPIO as GPIO
@@ -23,12 +23,12 @@ def run_4sd_real(callback, stop_event, code, settings, device_info):
     segments = settings['segment_pins']
     digits = settings['digit_pins']
     
-    for segment in segments:
-        GPIO.setup(segment, GPIO.OUT)
-        GPIO.output(segment, 0)
-    for digit in digits:
-        GPIO.setup(digit, GPIO.OUT)
-        GPIO.output(digit, 1)
+    for s_pin in segments:
+        GPIO.setup(s_pin, GPIO.OUT)
+        GPIO.output(s_pin, 0)
+    for d_pin in digits:
+        GPIO.setup(d_pin, GPIO.OUT)
+        GPIO.output(d_pin, 1)
 
     num = {
         ' ':(0,0,0,0,0,0,0), '0':(1,1,1,1,1,1,0), '1':(0,1,1,0,0,0,0),
@@ -38,24 +38,16 @@ def run_4sd_real(callback, stop_event, code, settings, device_info):
     }
 
     try:
-        last_callback_time = 0
         while not stop_event.is_set():
-            current_time = time.ctime()
-            n = current_time[11:13] + current_time[14:16]
-            s = str(n).rjust(4)
+            s = get_4sd_state() 
             
-            if time.time() - last_callback_time > 5:
-                set_4sd_state(s)
-                callback(s, code, settings, device_info)
-                last_callback_time = time.time()
-
             for digit in range(4):
                 if stop_event.is_set(): break
                 
                 for loop in range(0, 7):
                     GPIO.output(segments[loop], num[s[digit]][loop])
                 
-                if (int(time.ctime()[18:19]) % 2 == 0) and (digit == 1):
+                if (int(time.time()) % 2 == 0) and (digit == 1):
                     GPIO.output(segments[7], 1)
                 else:
                     GPIO.output(segments[7], 0)
@@ -69,23 +61,23 @@ def run_4sd_real(callback, stop_event, code, settings, device_info):
 def run_4sd(settings, threads, stop_event, device_info):
     code = settings['code']
     
+    initial_value = settings.get('initial_value', "0100")
+    set_4sd_state(initial_value)
+
     if settings['simulated']:
-        delay = settings.get('delay', 1)
-        def simulated_logic():
-            while not stop_event.is_set():
-                n = time.ctime()[11:13] + time.ctime()[14:16]
-                set_4sd_state(n)
-                time.sleep(1)
-
-        logic_thread = threading.Thread(target=simulated_logic)
-        logic_thread.start()
-        threads.append(logic_thread)
-
         seg_thread = threading.Thread(
             target=run_4sd_simulator, 
-            args=(delay, lambda v, c: _4sd_callback(v, c, settings, device_info), stop_event, code)
+            args=(0.5, lambda v, c: _4sd_callback(v, c, settings, device_info), stop_event, code)
         )
     else:
+        sim_thread = threading.Thread(
+            target=run_4sd_simulator,
+            args=(1.0, lambda v, c: _4sd_callback(v, c, settings, device_info), stop_event, code),
+            daemon=True
+        )
+        sim_thread.start()
+        threads.append(sim_thread)
+
         seg_thread = threading.Thread(
             target=run_4sd_real, 
             args=(_4sd_callback, stop_event, code, settings, device_info)

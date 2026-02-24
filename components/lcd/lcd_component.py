@@ -1,11 +1,10 @@
 import threading
 import time
-import platform
-import random
 from common.mqqt_sender import batch_queue
-from simulators.lcd_simulator import run_lcd_simulator, set_lcd_state
+from simulators.lcd_simulator import run_lcd_simulator, set_lcd_state, get_lcd_state
 
 def lcd_callback(line1, line2, code, settings, device_info):
+    """Šalje trenutno stanje LCD-a u InfluxDB."""
     payload = {
         "measurement": "LCD_Display",
         "device_name": device_info['device_name'],
@@ -16,22 +15,12 @@ def lcd_callback(line1, line2, code, settings, device_info):
         "simulated": settings['simulated']
     }
     batch_queue.put(payload)
-    print(f"[{code}] LCD Update: L1: '{line1}' | L2: '{line2}'")
-
-def get_cpu_temp():
-    if platform.system() == "Windows":
-        return '{:.2f}'.format(random.uniform(40.0, 60.0)) + ' C'
-    try:
-        with open('/sys/class/thermal/thermal_zone0/temp') as tmp:
-            cpu = tmp.read()
-        return '{:.2f}'.format(float(cpu)/1000) + ' C'
-    except:
-        return "0.00 C"
+    print(f"[{code}] LCD Influx Update: L1: '{line1}' | L2: '{line2}'")
 
 def run_lcd_real(callback, stop_event, code, settings, device_info):
+    """Logika za fizički LCD 1602 uređaj."""
     from .PCF8574 import PCF8574_GPIO
     from .Adafruit_LCD1602 import Adafruit_CharLCD
-    from datetime import datetime
 
     address = 0x27
     try:
@@ -43,37 +32,33 @@ def run_lcd_real(callback, stop_event, code, settings, device_info):
     mcp.output(3,1)
     lcd.begin(16,2)
 
+    last_l1, last_l2 = "", ""
+
     while not stop_event.is_set():
-        line1 = f"CPU: {get_cpu_temp()}"
-        line2 = datetime.now().strftime('    %H:%M:%S')
+        line1, line2 = get_lcd_state()
         
-        lcd.setCursor(0,0)
-        lcd.message(line1 + '\n')
-        lcd.message(line2)
+        if line1 != last_l1 or line2 != last_l2:
+            lcd.clear()
+            lcd.setCursor(0,0)
+            lcd.message(line1 + '\n')
+            lcd.message(line2)
+            
+            callback(line1, line2, code, settings, device_info)
+            
+            last_l1, last_l2 = line1, line2
         
-        set_lcd_state(line1, line2)
-        callback(line1, line2, code, settings, device_info)
-        
-        time.sleep(1)
+        time.sleep(0.5) 
     
     lcd.clear()
 
 def run_lcd(settings, threads, stop_event, device_info):
+    """Pokreće LCD komponentu."""
     code = settings['code']
     
+    set_lcd_state("Waiting for", "DHT data...")
+
     if settings['simulated']:
         delay = settings['delay']
-        def simulated_logic():
-            from datetime import datetime
-            while not stop_event.is_set():
-                l1 = f"CPU: {get_cpu_temp()} (S)"
-                l2 = datetime.now().strftime('    %H:%M:%S')
-                set_lcd_state(l1, l2)
-                time.sleep(1)
-
-        logic_thread = threading.Thread(target=simulated_logic)
-        logic_thread.start()
-        threads.append(logic_thread)
 
         lcd_thread = threading.Thread(
             target=run_lcd_simulator, 
