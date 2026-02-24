@@ -17,7 +17,7 @@ write_api = influx_client.write_api(write_options=SYNCHRONOUS)
 
 # VAR
 mqtt_connected = False
-people_count = 20
+people_count = 0
 
 # --- MQTT CALLBACKS ---
 def on_connect(client, userdata, flags, rc):
@@ -32,14 +32,10 @@ def on_connect(client, userdata, flags, rc):
 
 def handle_vars(payload, client):
     if payload["measurement"] == "alarm_events":
-        command = {
-                    "command": "",
-                }
         if payload["value"] == 1:
-            command['command'] = "ON"
+            alarm(client=client)
         else:
-            command['command'] = "OFF"
-        client.publish("commands/alarm", json.dumps(command))
+            alarm(client=client,state= False)
     if payload['code'] == 'DPIR1' or payload['code'] == 'DPIR2':
         global people_count
         if payload['people_count']:
@@ -50,11 +46,23 @@ def handle_vars(payload, client):
             if people_count > 0:
                 people_count -= 1
             else:
-                command = {
-                        "command": "ON",
-                        "reason": f"Motion detected by {payload['code']} while house empty"
-                    }
-                client.publish("commands/alarm", json.dumps(command))
+                alarm(client=client)
+    elif payload['code'] == 'DPIR3':
+        if people_count == 0:
+            alarm(client=client)
+
+def alarm(client, state = True):
+    if state:
+        command = {
+            "command": "ON"   
+        }
+        client.publish("commands/alarm", json.dumps(command))
+    else:
+        command = {
+            "command": "OFF"   
+        }
+        client.publish("commands/alarm", json.dumps(command))
+        
 
 def handle_val(payload):
     if payload['code'] == 'DHT3' or payload['code'] == 'DHT2' or payload['code'] == 'DHT1':

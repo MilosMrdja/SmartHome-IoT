@@ -9,7 +9,8 @@ def dpir3_callback(code, device_info, settings):
         "pi_id": device_info['pi_id'],
         "code": code,
         "value": 1,
-        "simulated": settings['simulated'] 
+        "simulated": settings['simulated'],
+        "people_count": None
     }
     batch_queue.put(payload) 
     print(f"[{code}] Sent to buffer: motion detected in living room")
