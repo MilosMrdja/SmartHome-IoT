@@ -78,6 +78,11 @@
     </div>
 
     <div id="pi2" class="tab-content">
+        <div class="card">
+            <h3>Kontrola 7-Segmentnog ekrana</h3>
+            <input type="text" id="displayInput" placeholder="Unesi 4 cifre" maxlength="4">
+            <button onclick="sendToDisplay()">Prikaži na satu</button>
+        </div>
         <div class="grid">
             <div class="card">
                 <h3>DS2 - Dugme vrata</h3>
@@ -111,6 +116,16 @@
     </div>
 
     <div id="pi3" class="tab-content">
+        <div class="card" style="text-align: center; display: flex; align-items: center; justify-content: center;">
+            <div>
+                <h3>Simulator Daljinskog Upravljača</h3>
+                <p>Klikni da simuliraš nasumičan pritisak dugmeta na PI3</p>
+                <button onclick="triggerIR()" style="padding: 15px 30px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                    Simuliraj IR Pritisak
+                </button>
+                <p id="ir-status" style="margin-top: 10px; font-weight: bold;"></p>
+            </div>
+        </div>
         <div class="grid">
             <div class="card">
                 <h3>DHT1 - Velika spavaća (T/H)</h3>
@@ -179,7 +194,36 @@ function toggleAlarm() {
             btn.textContent = 'ALARM NEAKTIVAN 🔴';
         })
         .catch(err => console.error("Greška:", err));
-}
+      }
+    function triggerIR() {
+        const statusEl = document.getElementById('ir-status');
+        statusEl.innerText = "Slanje komande...";
+        statusEl.style.color = "orange";
+
+        fetch('/simulate-ir')
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error('Greška pri slanju');
+            })
+            .then(data => {
+                statusEl.innerText = "Uspeh: " + data;
+                statusEl.style.color = "green";
+            })
+            .catch(error => {
+                statusEl.innerText = "Greška: " + error.message;
+                statusEl.style.color = "red";
+            });
+    }
+    function sendToDisplay() {
+    const val = document.getElementById('displayInput').value;
+    if(val.length !== 4) { alert("Unesi 4 broja!"); return; }
+    
+    fetch('/update-display/' + val)
+        .then(res => res.text())
+        .then(data => alert(data));
+    }      
 </script>
 
 </body>

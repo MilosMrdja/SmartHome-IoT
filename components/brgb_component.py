@@ -3,6 +3,19 @@ import time
 from common.mqqt_sender import batch_queue
 from simulators.brgb_simulator import run_brgb_simulator
 
+brgb_status = {
+    "is_on": False,
+    "current_color": "OFF"
+}
+status_lock = threading.Lock()
+
+def update_brgb_state(turn_on=None, color=None):
+    with status_lock:
+        if turn_on is not None:
+            brgb_status["is_on"] = turn_on
+        if color is not None:
+            brgb_status["current_color"] = color
+
 def brgb_callback(state, code, settings, device_info):
     payload = {
         "measurement": "Bedroom_RGB",
@@ -63,22 +76,54 @@ def run_brgb_real(callback, stop_event, code, settings, device_info):
         GPIO.output(GREEN_PIN, GPIO.HIGH)
         GPIO.output(BLUE_PIN, GPIO.HIGH)
 
-    sequence = [
-        (turnOff, "OFF"), (white, "WHITE"), (red, "RED"), (green, "GREEN"),
-        (blue, "BLUE"), (yellow, "YELLOW"), (purple, "PURPLE"), (lightBlue, "LIGHT_BLUE")
-    ]
+    actions = {
+        "OFF": turnOff, "WHITE": white, "RED": red, "GREEN": green,
+        "BLUE": blue, "YELLOW": yellow, "PURPLE": purple, "LIGHT_BLUE": lightBlue
+    }
+
+    last_applied_color = ""
 
     try:
         while not stop_event.is_set():
-            for action, name in sequence:
-                if stop_event.is_set():
-                    break
-                action()
-                callback(name, code, settings, device_info)
-                time.sleep(1)
+            with status_lock:
+                on = brgb_status["is_on"]
+                color = brgb_status["current_color"]
+
+            target_color = color if on else "OFF"
+
+            # Primeni boju samo ako se promenila da ne bismo stalno pisali po GPIO
+            if target_color != last_applied_color:
+                actions[target_color]()
+                callback(target_color, code, settings, device_info)
+                last_applied_color = target_color
+            
+            time.sleep(0.1)
     finally:
         GPIO.cleanup()
 
+def run_brgb_simulator_temp(delay, callback, stop_event, code):
+    """
+    Reaktivni simulator koji prati brgb_status i šalje podatke 
+    samo kada dođe do promene stanja.
+    """
+    last_applied_color = None
+    
+    while not stop_event.is_set():
+        # Čitanje trenutnog ciljanog stanja pod lock-om
+        with status_lock:
+            on = brgb_status["is_on"]
+            color = brgb_status["current_color"]
+
+        # Određujemo boju: ako je isključeno, uvek je "OFF"
+        target_color = color if on else "OFF"
+
+        # Ako se boja promenila u odnosu na poslednju poslatu
+        if target_color != last_applied_color:
+            callback(target_color, code)
+            last_applied_color = target_color
+        
+        # Mala pauza da nit ne "pojede" procesor (ne mora delay iz settingsa)
+        time.sleep(0.1)
 
 def run_brgb(settings, threads, stop_event, device_info):
     code = settings['code']
@@ -88,7 +133,7 @@ def run_brgb(settings, threads, stop_event, device_info):
         print(f"Starting {code} simulator")
 
         drgb_thread = threading.Thread(
-            target=run_brgb_simulator, 
+            target=run_brgb_simulator_temp, 
             args=(delay, lambda s, c: brgb_callback(s, c, settings, device_info), stop_event, code)
         )
     else:

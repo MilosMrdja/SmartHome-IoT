@@ -1,3 +1,4 @@
+import random
 import threading
 from flask import jsonify, request
 
@@ -23,6 +24,8 @@ HOME_PIN = "1234"
 CURRENT_PIN = ""
 ALARM_TRIGGERED = False # alarm radi
 ALARM_ACTIVATED = False # alarm je spreman za rad
+people_coint_2 = 0
+people_coint_3 = 0
 
 # --- MQTT CALLBACKS ---
 def on_connect(client, userdata, flags, rc):
@@ -178,6 +181,28 @@ mqtt_client = mqtt.Client(protocol=mqtt.MQTTv311)
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
 
+IR_BUTTONS = ["OK", "1", "2", "3", "4", "5", "6", "0"]
+
+@app.route('/simulate-ir')
+def simulate_ir():
+    if mqtt_connected:
+        button = random.choice(IR_BUTTONS)
+        payload = {"command": "SIMULATE_IR", "button": button}
+        # Šaljemo komandu direktno na temu koju PI3 sluša
+        mqtt_client.publish("commands/pi3/ir", json.dumps(payload))
+        return f"Poslata komanda za dugme: {button}", 200
+    return "MQTT nije povezan", 500
+
+@app.route('/update-display/<value>')
+def update_display(value):
+    if len(value) != 4 or not value.isdigit():
+        return "Mora biti tačno 4 cifre", 400
+    
+    if mqtt_connected:
+        payload = {"command": "SET_DISPLAY", "value": value}
+        mqtt_client.publish("commands/pi2/4sd", json.dumps(payload))
+        return f"Poslato na displej: {value}", 200
+    return "MQTT nije povezan", 500
 
 @app.route('/')
 def index():

@@ -3,6 +3,7 @@ import time
 from common.locks import print_lock
 from common.mqqt_sender import batch_queue
 from simulators.ir_simulator import run_ir_simulator, BUTTON_CODES, BUTTON_NAMES
+from components.brgb_component import update_brgb_state, brgb_status, status_lock
 
 def ir_callback(button, code, device_info, settings):
     payload = {
@@ -15,6 +16,49 @@ def ir_callback(button, code, device_info, settings):
     }
     batch_queue.put(payload) 
     print(f"[{code}] Sent to buffer: IR Button {button} detected")
+    if button == "OK":
+        # Toggle Power: Ako je upaljena - ugasi, ako je ugašena - upali na belo
+        with status_lock:
+            current_on_state = brgb_status["is_on"]
+        
+        if current_on_state:
+            update_brgb_state(turn_on=False)
+            print("BRGB -> Power OFF")
+        else:
+            update_brgb_state(turn_on=True, color="WHITE")
+            print("BRGB -> Power ON (White)")
+
+    elif button == "1":
+        update_brgb_state(turn_on=True, color="RED")
+        print("BRGB -> Color: RED")
+        
+    elif button == "2":
+        update_brgb_state(turn_on=True, color="GREEN")
+        print("BRGB -> Color: GREEN")
+        
+    elif button == "3":
+        update_brgb_state(turn_on=True, color="BLUE")
+        print("BRGB -> Color: BLUE")
+        
+    elif button == "4":
+        update_brgb_state(turn_on=True, color="YELLOW")
+        print("BRGB -> Color: YELLOW")
+        
+    elif button == "5":
+        update_brgb_state(turn_on=True, color="PURPLE")
+        print("BRGB -> Color: PURPLE")
+        
+    elif button == "6":
+        update_brgb_state(turn_on=True, color="LIGHT_BLUE")
+        print("BRGB -> Color: LIGHT_BLUE")
+
+    elif button == "0":
+        update_brgb_state(turn_on=False)
+        print("BRGB -> OFF")
+    else:
+        update_brgb_state(turn_on=True, color="YELLOW")
+        print("BRGB -> Color: YELLOW")
+    print(f"[{code}] Sent to brgb: {button}")
 
 
 def get_binary(pin, stop_event):
