@@ -1,15 +1,15 @@
 {
   "device_info": {
-    "pi_id": "PI1",
-    "device_name": "Gate_Control_Unit_1"
+    "pi_id": "PI3",
+    "device_name": "Gate_Control_Unit_3"
   },
   "mqtt": {
-    "broker_hostname": "192.168.107.198",
+    "broker_hostname": "192.168.0.102",
     "port": 1883,
     "topic": "iot/pi1/batch"
   },
   "DL": {
-    "simulated": false,
+    "simulated": true,
     "pin": 18,
     "delay": 2,
     "code": "DL"
@@ -29,7 +29,7 @@
     "code": "DUS1"
   },
   "DPIR1": {
-    "simulated": false,
+    "simulated": true,
     "pin": 17,
     "code": "DPIR1",
     "delay": 2
@@ -80,14 +80,14 @@
   "BTN": {
     "simulated": true,
     "pin": 18,
-    "delay": 2,
+    "delay": 10,
     "code": "BTN"
   },
   "DHT3": {
     "code": "DHT3",
     "simulated": true,
     "pin": 17,
-    "delay": 2
+    "delay": 10
   },
   "GSG": {
     "code": "GSG",
@@ -99,13 +99,13 @@
     "code": "DHT1",
     "simulated": true,
     "pin": 17,
-    "delay": 2
+    "delay": 13
   },
   "DHT2": {
     "code": "DHT2",
     "simulated": true,
     "pin": 17,
-    "delay": 2
+    "delay": 11
   },
   "DPIR3": {
     "simulated": true,

@@ -3,10 +3,19 @@ import time
 from common.locks import print_lock
 from common.mqqt_sender import batch_queue
 from simulators.dht3_simulator import run_dht3_simulator
+from simulators.lcd_simulator import set_lcd_state
 
 def dht3_callback(code, device_info, settings, temperature, humidity):
+    line1 = f"Temp: {temperature} C"
+    line2 = f"Hum:  {humidity} %"
+    
+    try:
+        set_lcd_state(line1, line2)
+    except Exception as e:
+        print(f"LCD not initialized yet: {e}")
+
     payload = {
-        "measurement": "Kitchen DHT",
+        "measurement": "Bedroom_DHT",
         "device_name": device_info['device_name'],
         "pi_id": device_info['pi_id'],
         "code": code,
@@ -15,7 +24,7 @@ def dht3_callback(code, device_info, settings, temperature, humidity):
         "simulated": settings['simulated'] 
     }
     batch_queue.put(payload) 
-    print(f"[{code}] Sent to buffer: Temp: {temperature}°C, Hum: {humidity}%")
+    print(f"[{code}] Sent to buffer & LCD: T: {temperature}C, H: {humidity}%")
 
 def real_dht3_loop(settings, stop_event, device_info):
     import RPi.GPIO as GPIO
