@@ -20,7 +20,7 @@ def generate_dms_events():
 
 
 def run_dms_simulator(delay, callback, stop_event, code):
-    for key in generate_dms_events():
+    for key in ["1","2","3","4"]:
         if stop_event.is_set():
             break
 

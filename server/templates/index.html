@@ -10,26 +10,34 @@
 
         /* Stilovi za Tabove */
         .tab-menu { display: flex; justify-content: center; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab-btn { padding: 10px 30px; cursor: pointer; border: none; background: none; font-size: 18px; font-weight: bold; color: #5f6368; transition: 0.3s; }
+        .tab-btn { padding: 10px 30px; cursor: pointer; border: none; background: none; font-size: 18px; font-weight: bold; color: #5f6368; transition: 0.3s; border-bottom: 3px solid transparent; }
         .tab-btn:hover { color: #1a73e8; }
         .tab-btn.active { color: #1a73e8; border-bottom: 3px solid #1a73e8; }
 
         /* Sadržaj taba */
-        .tab-content { display: none; animation: fadeEffect 0.5s; }
+        .tab-content { display: none; }
+        .active-content { display: block; animation: fadeEffect 0.5s; }
         @keyframes fadeEffect { from {opacity: 0;} to {opacity: 1;} }
-        .active-content { display: block; }
 
         /* Kartice za grafikone */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; margin-top: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin-top: 20px; }
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .card h3 { margin-top: 0; color: #3c4043; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .card h3 { margin-top: 0; color: #3c4043; border-bottom: 1px solid #eee; padding-bottom: 10px; font-size: 1.1em; }
 
         iframe { width: 100%; height: 250px; border: none; border-radius: 8px; }
 
-        .info-bar { margin-top: 30px; text-align: center; font-size: 0.9em; color: #70757a; }
+        .info-bar { margin-top: 30px; text-align: center; font-size: 0.9em; color: #70757a; padding: 20px; border-top: 1px solid #ddd; }
     </style>
 </head>
 <body>
+
+<div style="text-align:center; margin-bottom:20px;">
+    <button id="alarmBtn"
+            onclick="toggleAlarm()"
+            style="padding:15px 40px; font-size:18px; font-weight:bold; border:none; border-radius:10px; cursor:pointer; color:white; background-color: {{ 'red' if ALARM_TRIGGERED else 'green' }};">
+        {{ 'ALARM AKTIVAN 🟢' if ALARM_TRIGGERED else 'ALARM NEAKTIVAN 🔴' }}
+    </button>
+</div>
 
 <div class="container">
     <h1>Smart Home IoT Dashboard</h1>
@@ -43,26 +51,28 @@
     <div id="pi1" class="tab-content active-content">
         <div class="grid">
             <div class="card">
-                <h3>DPIR1 - Detekcija pokreta, broj ljudi: {{ people_count_pi1 }}</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=2" width="450" height="200" frameborder="0"></iframe>
+                <h3>DPIR1 - Detekcija pokreta (Ljudi: {{ people_count_pi1 }})</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=2"></iframe>
             </div>
             <div class="card">
                 <h3>DUS1 - Senzor vrata</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=3" width="450" height="200" frameborder="0"></iframe></div>
-            <div class="card">
-                <h3>DL - Dioda</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=4" width="450" height="200" frameborder="0"></iframe>            </div>
-            <div class="card">
-                <h3>DS1 - Senzor(dugme) vrata</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=5" width="450" height="200" frameborder="0"></iframe>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=3"></iframe>
             </div>
             <div class="card">
-                <h3>DMS1 - Detekcija pritiska tastera</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=6" width="450" height="200" frameborder="0"></iframe>
-                </div>
+                <h3>DL - Dioda</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=4"></iframe>
+            </div>
             <div class="card">
-                <h3>DB1 - Bazer za vrata</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=7" width="450" height="200" frameborder="0"></iframe>
+                <h3>DS1 - Dugme vrata</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=5"></iframe>
+            </div>
+            <div class="card">
+                <h3>DMS1 - Tastatura</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=6"></iframe>
+            </div>
+            <div class="card">
+                <h3>DB1 - Bazer</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=7"></iframe>
             </div>
         </div>
     </div>
@@ -75,31 +85,32 @@
         </div>
         <div class="grid">
             <div class="card">
-                <h3>DS2 - Senzor(dugme) vrata</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=1" width="450" height="200" frameborder="0"></iframe>
+                <h3>DS2 - Dugme vrata</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=1"></iframe>
             </div>
             <div class="card">
                 <h3>DUS2 - Senzor vrata</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=8" width="450" height="200" frameborder="0"></iframe>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=8"></iframe>
             </div>
             <div class="card">
                 <h3>DPIR2 - Detekcija pokreta</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=9" width="450" height="200" frameborder="0"></iframe>            </div>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=9"></iframe>
+            </div>
             <div class="card">
                 <h3>4SG - 7-segmentni ekran</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=10" width="450" height="200" frameborder="0"></iframe>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=10"></iframe>
             </div>
             <div class="card">
-                <h3>BTN - Dugme za kuhinjska vrata</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=11" width="450" height="200" frameborder="0"></iframe>
+                <h3>BTN - Kuhinjska vrata</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=11"></iframe>
             </div>
             <div class="card">
-                <h3>DHT3 - Senzor za vlaznost i temperaturu u kuhinji</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=12" width="450" height="200" frameborder="0"></iframe>
+                <h3>DHT3 - Kuhinja (T/H)</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=12"></iframe>
             </div>
             <div class="card">
-                <h3>GSG - Ziroskop u kuhinji</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=13" width="450" height="200" frameborder="0"></iframe>
+                <h3>GSG - Žiroskop</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=13"></iframe>
             </div>
         </div>
     </div>
@@ -117,28 +128,28 @@
         </div>
         <div class="grid">
             <div class="card">
-                <h3>DHT1 - Temperatura i vlažnost velike spavace sobe</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=14" width="450" height="200" frameborder="0"></iframe>
+                <h3>DHT1 - Velika spavaća (T/H)</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=14"></iframe>
             </div>
             <div class="card">
-                <h3>DHT2 - Temperatura i vlažnost spavace sobe</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=15" width="450" height="200" frameborder="0"></iframe>
+                <h3>DHT2 - Spavaća soba (T/H)</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=15"></iframe>
             </div>
             <div class="card">
-                <h3>DPIR3 - Detekcija pokreta u dnevnoj sobi</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=16" width="450" height="200" frameborder="0"></iframe>
+                <h3>DPIR3 - Dnevna soba</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=16"></iframe>
             </div>
             <div class="card">
-                <h3>BRGB - Boja u spavacoj sobi</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=17" width="450" height="200" frameborder="0"></iframe>
+                <h3>BRGB - RGB Boja</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=17"></iframe>
             </div>
             <div class="card">
-                <h3>LCD - LCD ekran u dnevnom boravku</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=18" width="450" height="200" frameborder="0"></iframe>
+                <h3>LCD - Ekran</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=18"></iframe>
             </div>
             <div class="card">
-                <h3>IR - Infrared u spavacoj sobi</h3>
-                <iframe src="http://{{  mqtt_broker  }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=19" width="450" height="200" frameborder="0"></iframe>
+                <h3>IR - Infrared</h3>
+                <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=19"></iframe>
             </div>
         </div>
     </div>
@@ -153,17 +164,37 @@
 <script>
     function openPi(evt, piName) {
         var i, tabcontent, tablinks;
+        
+        // Sakrij sve tabove
         tabcontent = document.getElementsByClassName("tab-content");
         for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].classList.remove("active-content");
             tabcontent[i].style.display = "none";
         }
+        
+        // Ukloni "active" klasu sa svih dugmića
         tablinks = document.getElementsByClassName("tab-btn");
         for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
+            tablinks[i].classList.remove("active");
         }
-        document.getElementById(piName).style.display = "block";
-        evt.currentTarget.className += " active";
+        
+        // Prikaži selektovani tab i dodaj aktivnu klasu
+        const activeTab = document.getElementById(piName);
+        activeTab.style.display = "block";
+        activeTab.classList.add("active-content");
+        evt.currentTarget.classList.add("active");
     }
+
+function toggleAlarm() {
+    fetch('/toggle_alarm', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            const btn = document.getElementById('alarmBtn');
+            btn.style.backgroundColor = 'green';
+            btn.textContent = 'ALARM NEAKTIVAN 🔴';
+        })
+        .catch(err => console.error("Greška:", err));
+      }
     function triggerIR() {
         const statusEl = document.getElementById('ir-status');
         statusEl.innerText = "Slanje komande...";

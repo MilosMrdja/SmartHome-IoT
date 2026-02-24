@@ -7,13 +7,10 @@ from common.mqqt_sender import batch_queue
 active_timers = {}
 
 def check_and_trigger_alarm(pin, device_info, settings):
-    """Ova funkcija se izvršava NAKON 5 sekundi."""
     import RPi.GPIO as GPIO
-    # Ako je pin i dalje LOW, znači da korisnik NIJE pustio dugme
     if GPIO.input(pin) == GPIO.LOW:
         print(f"ALARM AKTIVIRAN! Dugme na pinu {pin} je držano 5 sekundi.")
         turn_alarm_on(device_info, settings)
-        # Ovdje možeš poslati i poseban MQTT paket za Influx
     else:
         print("Dugme je pušteno prije isteka vremena, alarm nije aktiviran.")
 
@@ -21,32 +18,25 @@ def handle_button_event(pin, callback, code, device_info, settings):
     device_name = device_info['device_name']
     import RPi.GPIO as GPIO
     if GPIO.input(pin) == GPIO.LOW:
-        # --- DUGME JE STISNUTO ---
         print(f"[{code}] Stisnuto. Pokrećem odbrojavanje 5s...")
         
-        # Ako već postoji tajmer, otkaži ga (za svaki slučaj)
         if device_name in active_timers:
             active_timers[device_name].cancel()
             
-        # Pokreni novi tajmer na 5 sekundi
         t = threading.Timer(5.0, check_and_trigger_alarm, args=(pin, device_info, settings))
         active_timers[device_name] = t
         t.start()
         
-        # Javi serveru da je pritisnuto
         callback(code, device_info, settings, 1)
 
     else:
-        # --- DUGME JE PUŠTENO ---
         print(f"[{code}] Pušteno.")
         
-        # Ako korisnik pusti dugme, ODMAH ugasi tajmer da se alarm ne bi upalio
         if device_name in active_timers:
             active_timers[device_name].cancel()
             del active_timers[device_name]
             print("Tajmer zaustavljen.")
         
-        # Ugasi alarm ako je bio upaljen i javi serveru da je pušteno
         turn_alarm_off(device_info)
         callback(code, device_info, settings, 0)
     
@@ -96,13 +86,11 @@ def run_ds1(settings, threads, stop_event, device_info):
             code = settings['code']
             
             GPIO.setmode(GPIO.BCM)
-            # Koristimo PUD_UP (dugme spaja na GND kad se stisne)
             GPIO.setup(port_btn, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             
             turn_alarm_off(device_info) 
             if port_btn in active_timers:
                 active_timers[port_btn].cancel()
-            # Reagujemo na SVAKU promjenu stanja (stisak i puštanje)
             GPIO.add_event_detect(port_btn, GPIO.BOTH, 
                                 callback=lambda x: handle_button_event(port_btn, ds1_callback, code, device_info, settings), 
                                 bouncetime=50)

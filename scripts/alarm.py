@@ -6,39 +6,33 @@ from common.mqqt_sender import batch_queue
 from simulators.db_simulator import set_buzzer_state
 
 
-is_alarm_active = False
 
-def turn_alarm_on(device_info, settings):
-    global is_alarm_active
-    if not is_alarm_active:
-        is_alarm_active = True
+def turn_alarm_on(device_info, settings, from_server = False):
+    if from_server:
         set_buzzer_state(True)
         print(f"!!! ALARM WAS ACTIVATED!!!")
-        
+    else:
         payload = {
             "measurement": "alarm_events",
             "device_name": device_info['device_name'],
             "pi_id": device_info['pi_id'],
             "code": settings["code"],
-            "simulated" : device_info['simulated'],
+            "simulated" : settings['simulated'],
             "value": 1
         }
         print(payload)
         batch_queue.put(payload)
 
-def turn_alarm_off(device_info):
-    global is_alarm_active
-    if is_alarm_active:
-        is_alarm_active = False
+def turn_alarm_off(device_info, from_server = False):
+    if from_server:
         set_buzzer_state(False)
         print("ALARM WAS DEACTIVATED")
-        
+    else:    
         payload = {
             "measurement": "alarm_events",
             "device_name": device_info['device_name'],
             "pi_id": device_info['pi_id'],
             "code": "PIN_OR_WEB_DEACTIVATION",
-            "simulated" : device_info['simulated'],
             "value": 0 
         }
         batch_queue.put(payload)
@@ -51,9 +45,9 @@ def on_message(client, userdata, msg, device_info):
     try:
         data = json.loads(msg.payload.decode())
         if data['command'] == 'ON':
-            turn_alarm_on(device_info, {"code": data.get('reason', 'REMOTE_COMMAND')})
+            turn_alarm_on(device_info, {"code": data.get('code', 'REMOTE_COMMAND')}, from_server=True)
         elif data['command'] == 'OFF':
-            turn_alarm_off(device_info)
+            turn_alarm_off(device_info, from_server=True)
     except Exception as e:
         print(f"Error processing alarm command: {e}")
 
