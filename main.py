@@ -27,6 +27,7 @@ from components.dpir1_component import run_dpir1
 from components.dms_component import run_dms
 from components.db_component import run_db
 from scripts.alarm import run_alarm_listener
+from scripts.ir_remote_listener import run_ir_remote_listener
 
 try:
     import RPi.GPIO as GPIO
@@ -83,12 +84,19 @@ if __name__ == "__main__":
         run_dht3(settings['DHT3'], threads, stop_event, device_info) # vezbe 3
         run_gsg(settings['GSG'], threads, stop_event, device_info) # vezbe 6
     elif settings["device_info"]["pi_id"] == "PI3":
-        run_dht1(settings['DHT1'], threads, stop_event, device_info) # vezbe 3
-        run_dht2(settings['DHT2'], threads, stop_event, device_info) # vezbe 3
-        run_ir(settings['IR'], threads, stop_event, device_info) # vezbe 5
+        alarm_listener_thread = threading.Thread(
+            target=run_ir_remote_listener, 
+            args=(device_info, mqtt_settings),
+            daemon=True
+        )
+        alarm_listener_thread.start()
+        threads.append(alarm_listener_thread)
+        #run_dht1(settings['DHT1'], threads, stop_event, device_info) # vezbe 3
+        #run_dht2(settings['DHT2'], threads, stop_event, device_info) # vezbe 3
+        #run_ir(settings['IR'], threads, stop_event, device_info) # vezbe 5
         run_brgb(settings['BRGB'], threads, stop_event, device_info) # vezbe 4 # otpornici 220 oma # ne ide na 3.3v nego na ground
-        run_lcd(settings['LCD'], threads, stop_event, device_info) # vezbe 3
-        run_dpir3(settings['DPIR3'], threads, stop_event, device_info) # vezbe 2
+        #run_lcd(settings['LCD'], threads, stop_event, device_info) # vezbe 3
+        #run_dpir3(settings['DPIR3'], threads, stop_event, device_info) # vezbe 2
 
 
 

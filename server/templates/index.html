@@ -100,6 +100,16 @@
     </div>
 
     <div id="pi3" class="tab-content">
+        <div class="card" style="text-align: center; display: flex; align-items: center; justify-content: center;">
+            <div>
+                <h3>Simulator Daljinskog Upravljača</h3>
+                <p>Klikni da simuliraš nasumičan pritisak dugmeta na PI3</p>
+                <button onclick="triggerIR()" style="padding: 15px 30px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                    Simuliraj IR Pritisak
+                </button>
+                <p id="ir-status" style="margin-top: 10px; font-weight: bold;"></p>
+            </div>
+        </div>
         <div class="grid">
             <div class="card">
                 <h3>DHT1 - Temperatura i vlažnost velike spavace sobe</h3>
@@ -148,6 +158,27 @@
         }
         document.getElementById(piName).style.display = "block";
         evt.currentTarget.className += " active";
+    }
+    function triggerIR() {
+        const statusEl = document.getElementById('ir-status');
+        statusEl.innerText = "Slanje komande...";
+        statusEl.style.color = "orange";
+
+        fetch('/simulate-ir')
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error('Greška pri slanju');
+            })
+            .then(data => {
+                statusEl.innerText = "Uspeh: " + data;
+                statusEl.style.color = "green";
+            })
+            .catch(error => {
+                statusEl.innerText = "Greška: " + error.message;
+                statusEl.style.color = "red";
+            });
     }
 </script>
 
