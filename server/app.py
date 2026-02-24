@@ -1,4 +1,5 @@
 import threading
+from flask import jsonify, request
 
 from flask import Flask, render_template
 import paho.mqtt.client as mqtt
@@ -18,6 +19,10 @@ write_api = influx_client.write_api(write_options=SYNCHRONOUS)
 # VAR
 mqtt_connected = False
 people_count = 0
+HOME_PIN = "1234"
+CURRENT_PIN = ""
+ALARM_TRIGGERED = False # alarm radi
+ALARM_ACTIVATED = False # alarm je spreman za rad
 
 # --- MQTT CALLBACKS ---
 def on_connect(client, userdata, flags, rc):
@@ -36,7 +41,7 @@ def handle_vars(payload, client):
             alarm(client=client)
         else:
             alarm(client=client,state= False)
-    if payload['code'] == 'DPIR1' or payload['code'] == 'DPIR2':
+    elif payload['code'] == 'DPIR1' or payload['code'] == 'DPIR2':
         global people_count
         if payload['people_count']:
             people_count += 1
@@ -51,16 +56,55 @@ def handle_vars(payload, client):
         if people_count == 0:
             alarm(client=client)
 
+    elif payload['code'] == "DMS":
+        global ALARM_ACTIVATED, ALARM_TRIGGERED, CURRENT_PIN
+        if len(CURRENT_PIN)<4:
+            CURRENT_PIN += str(payload['value'])
+
+        if len(CURRENT_PIN) == 4:
+            print(CURRENT_PIN)
+            print(HOME_PIN)
+            if CURRENT_PIN == HOME_PIN:
+                if ALARM_TRIGGERED:
+                    ALARM_TRIGGERED = False
+                    alarm(client=client, state=False)
+
+                elif not ALARM_ACTIVATED:
+                    activate_system_with_delay()
+                else:
+                    ALARM_ACTIVATED = False
+            else:
+                activate_system()
+                alarm(client=client)
+
+            CURRENT_PIN = ""
+
+def activate_system_with_delay():
+    global ALARM_ACTIVATED
+    threading.Timer(10, activate_system).start()
+
+def activate_system():
+    global ALARM_ACTIVATED
+    ALARM_ACTIVATED = True
+    print("ALARM WAS ACTIVATED")
+
 def alarm(client, state = True):
-    if state:
+    global ALARM_ACTIVATED
+    global ALARM_TRIGGERED
+    if not ALARM_ACTIVATED:
+        return
+    
+    if state and not ALARM_TRIGGERED:
         command = {
             "command": "ON"   
         }
+        ALARM_TRIGGERED = True
         client.publish("commands/alarm", json.dumps(command))
-    else:
+    elif not state and ALARM_TRIGGERED:
         command = {
             "command": "OFF"   
         }
+        ALARM_TRIGGERED = False
         client.publish("commands/alarm", json.dumps(command))
         
 
@@ -106,7 +150,7 @@ def handle_val(payload):
             .tag("code", payload['code'])
             .tag("pi_id", payload['pi_id'])
             .tag("device_name", payload['device_name'])
-            .tag("simulated", str(payload['simulated']))
+            .tag("simulated", str(payload.get('simulated', False)))
             .field("value", payload['value'])
         )
 
@@ -147,8 +191,20 @@ def index():
                            mqtt_status=mqtt_info,
                            mqtt_broker=MQTT_BROKER,
                            people_count_pi1=people_count,
-                           org_name=INFLUX_ORG)
+                           org_name=INFLUX_ORG,
+                           ALARM_TRIGGERED=ALARM_TRIGGERED)
 
+
+@app.route('/toggle_alarm', methods=['POST'])
+def toggle_alarm():
+    global ALARM_TRIGGERED, CURRENT_PIN
+    if ALARM_TRIGGERED:
+        ALARM_TRIGGERED = False
+        CURRENT_PIN = ""
+        alarm(mqtt_client,state=False)
+        print("ALARM DEAKTIVIRAN PREKO DASHBOARDA")
+        return jsonify({"activated": False, "status": "detriggered"})
+    return jsonify({"activated": False, "status": "no_trigger_active"})
 
 def run_mqtt():
     mqtt_client.connect(MQTT_BROKER, 1883, 60)
@@ -161,4 +217,4 @@ if __name__ == "__main__":
     thread.daemon = True
     thread.start()
 
-    app.run(debug=True, port=5000)
+    app.run(debug=True, use_reloader=False, port=5000)
