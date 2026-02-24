@@ -1,7 +1,7 @@
 {
   "device_info": {
-    "pi_id": "PI2",
-    "device_name": "Gate_Control_Unit_2"
+    "pi_id": "PI1",
+    "device_name": "Gate_Control_Unit_1"
   },
   "mqtt": {
     "broker_hostname": "192.168.0.102",

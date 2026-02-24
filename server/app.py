@@ -7,19 +7,35 @@ import paho.mqtt.client as mqtt
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import json
+from flask_socketio import SocketIO
+
 from config.config import MQTT_BROKER, MQTT_TOPIC,INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET
 
 app = Flask(__name__)
-
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 # InfluxDB setup
 influx_client = InfluxDBClient(url=INFLUX_URL, token=INFLUX_TOKEN, org=INFLUX_ORG)
 write_api = influx_client.write_api(write_options=SYNCHRONOUS)
 
-# VAR
+# VARs
 mqtt_connected = False
 people_count = 0
+dht1_temp = 0
+dht1_hum = 0
+dht2_temp = 0
+dht2_hum = 0
+dht3_temp = 0
+dht3_hum = 0
+_4sd_current_value = "0100"
+line1 = ""
+line2 = ""
+ds2 = "Otvoreno"
+ds1 = "Otvoreno"
+dl = "Ukljuceno"
+db = "Ukljuceno"
+
 HOME_PIN = "1234"
 CURRENT_PIN = ""
 ALARM_TRIGGERED = False # alarm radi
@@ -111,7 +127,58 @@ def alarm(client, state = True):
         
 
 def handle_val(payload):
+    global dht1_temp, dht1_hum, dht2_temp, dht2_hum, dht3_temp, dht3_hum, _4sd_current_value, people_count, line1, line2, ds2, ds1, dl, db
+    
+    code = payload.get('code')
+    
+    if code == 'DHT1':
+        dht1_temp, dht1_hum = payload['temperature'], payload['humidity']
+    elif code == 'DHT2':
+        dht2_temp, dht2_hum = payload['temperature'], payload['humidity']
+    elif code == 'DHT3':
+        dht3_temp, dht3_hum = payload['temperature'], payload['humidity']
+    elif code == '4SD':
+        _4sd_current_value = payload['value']
+    elif code == 'DL':
+        if payload['value'] == 1:
+            dl = "Ukljuceno"
+        else:
+            dl = "Iskljuceno"
+    elif code == 'DB':
+        if payload['value'] == 1:
+            db = "Ukljuceno"
+        else:
+            db = "Iskljuceno"
+    elif code == "LCD":
+        line1 = payload['line1']
+        line2 = payload['line2']
+    elif code == 'DS2':
+        if payload['value'] == 1:
+            ds2 = 'Otvoreno'
+        else:
+            ds2 = 'Zatvoreno'
+    elif code == 'DS1':
+        if payload['value'] == 1:
+            ds1 = 'Otvoreno'
+        else:
+            ds1 = 'Zatvoreno'
+    # Emitovanje preko socketa SVAKI put kad stigne podatak
+    socketio.emit('update_data', {
+        'dht1_temp': dht1_temp, 'dht1_hum': dht1_hum,
+        'dht2_temp': dht2_temp, 'dht2_hum': dht2_hum,
+        'dht3_temp': dht3_temp, 'dht3_hum': dht3_hum,
+        '_4sd_current_value': _4sd_current_value,
+        'people_count': people_count,
+        'alarm_triggered': ALARM_TRIGGERED,
+        'line1': line1,
+        'line2':line2,
+        'ds2':ds2,
+        'ds1':ds1,
+        'dl' : dl,
+        'db':db
+    })  
     if (payload['code'] == 'DHT3' or payload['code'] == 'DHT2' or payload['code'] == 'DHT1') and payload['measurement'] != "alarm_events":
+        
         point = (
             Point(payload['measurement'])
             .tag("code", payload['code'])
@@ -147,6 +214,7 @@ def handle_val(payload):
         )
 
     else:
+
         point = (
             Point(payload['measurement'])
             .tag("code", payload['code'])
@@ -216,6 +284,13 @@ def index():
                            mqtt_broker=MQTT_BROKER,
                            people_count_pi1=people_count,
                            org_name=INFLUX_ORG,
+                           _4sd_current_value_view=_4sd_current_value,
+                           dht1_temp_view = dht1_temp,
+                            dht1_hum_view = dht1_hum,
+                            dht2_temp_view = dht2_temp,
+                            dht2_hum_view = dht2_hum,
+                            dht3_temp_view = dht3_temp,
+                            dht3_hum_view = dht3_hum,
                            ALARM_TRIGGERED=ALARM_TRIGGERED)
 
 

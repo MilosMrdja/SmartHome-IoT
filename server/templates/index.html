@@ -51,7 +51,7 @@
     <div id="pi1" class="tab-content active-content">
         <div class="grid">
             <div class="card">
-                <h3>DPIR1 - Detekcija pokreta (Ljudi: {{ people_count_pi1 }})</h3>
+                <h3>DPIR1 - Detekcija pokreta (Ljudi: <span id="val-people">{{ people_count_pi1 }}</span>)</h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=2"></iframe>
             </div>
             <div class="card">
@@ -59,11 +59,11 @@
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=3"></iframe>
             </div>
             <div class="card">
-                <h3>DL - Dioda</h3>
+                <h3>DL - Dioda: <span id="val-dl">{{ dl }}</span></h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=4"></iframe>
             </div>
             <div class="card">
-                <h3>DS1 - Dugme vrata</h3>
+                <h3>DS1 - Dugme vrata: <span id="val-ds1">{{ ds1 }}</span></h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=5"></iframe>
             </div>
             <div class="card">
@@ -71,7 +71,7 @@
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=6"></iframe>
             </div>
             <div class="card">
-                <h3>DB1 - Bazer</h3>
+                <h3>DB1 - Bazer: <span id="val-db">{{ db }}</span></h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=7"></iframe>
             </div>
         </div>
@@ -85,7 +85,7 @@
         </div>
         <div class="grid">
             <div class="card">
-                <h3>DS2 - Dugme vrata</h3>
+                <h3>DS2 - Dugme vrata: <span id="val-ds2">{{ ds2 }}</span></h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=1"></iframe>
             </div>
             <div class="card">
@@ -93,11 +93,11 @@
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=8"></iframe>
             </div>
             <div class="card">
-                <h3>DPIR2 - Detekcija pokreta (Ljudi: {{ people_count_pi1 }})</h3>
+                <h3>DPIR2 - Detekcija pokreta (Ljudi: <span id="val-people">{{ people_count_pi1 }}</span>)</h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=9"></iframe>
             </div>
             <div class="card">
-                <h3>4SG - 7-segmentni ekran</h3>
+                <h3>4SG - 7-segmentni ekran <span id="val-4sd">{{ _4sd_current_value }}</span></h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=10"></iframe>
             </div>
             <div class="card">
@@ -105,7 +105,7 @@
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=11"></iframe>
             </div>
             <div class="card">
-                <h3>DHT3 - Kuhinja (T/H)</h3>
+                <h3>DHT3 - Kuhinja (T/H) <span id="val-dht3-t">{{ dht3_temp_view }}</span>°C <span id="val-dht3-h">{{ dht3_hum_view }}</span>%</h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=12"></iframe>
             </div>
             <div class="card">
@@ -128,11 +128,12 @@
         </div>
         <div class="grid">
             <div class="card">
-                <h3>DHT1 - Velika spavaća (T/H)</h3>
+                <h3>DHT1 - Velika spavaca soba (T/H) <span id="val-dht1-t">{{ dht1_temp_view }}</span>°C <span id="val-dht1-h">{{ dht1_hum_view }}</span>%</h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=14"></iframe>
             </div>
             <div class="card">
-                <h3>DHT2 - Spavaća soba (T/H)</h3>
+                <h3>DHT2 - Spavaca soba (T/H) <span id="val-dht2-t">{{ dht2_temp_view }}</span>°C <span id="val-dht2-h">{{ dht2_hum_view }}</span>%</h3>
+                
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=15"></iframe>
             </div>
             <div class="card">
@@ -144,7 +145,7 @@
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=17"></iframe>
             </div>
             <div class="card">
-                <h3>LCD - Ekran</h3>
+                <h3>LCD - Ekran <span id="val-lcd-line1">{{ line1 }}</span>, <span id="val-lcd-line2">{{ line2 }}</span></h3>
                 <iframe src="http://{{ mqtt_broker }}:3000/d-solo/e07d82b4-9cef-41d8-99c1-a7a749bb0c5d/iot?orgId=2&panelId=18"></iframe>
             </div>
             <div class="card">
@@ -161,6 +162,7 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
     function openPi(evt, piName) {
         var i, tabcontent, tablinks;
@@ -223,7 +225,44 @@ function toggleAlarm() {
     fetch('/update-display/' + val)
         .then(res => res.text())
         .then(data => alert(data));
-    }      
+    }   
+    var socket = io();
+
+    socket.on('update_data', function(data) {
+        // Ažuriranje teksta na stranici u realnom vremenu
+        if(document.getElementById('val-dht1-t')) document.getElementById('val-dht1-t').innerText = data.dht1_temp;
+        if(document.getElementById('val-dht1-h')) document.getElementById('val-dht1-h').innerText = data.dht1_hum;
+
+        if(document.getElementById('val-dht2-t')) document.getElementById('val-dht2-t').innerText = data.dht2_temp;
+        if(document.getElementById('val-dht2-h')) document.getElementById('val-dht2-h').innerText = data.dht2_hum;
+        
+        if(document.getElementById('val-dht3-t')) document.getElementById('val-dht3-t').innerText = data.dht3_temp;
+        if(document.getElementById('val-dht3-h')) document.getElementById('val-dht3-h').innerText = data.dht3_hum;
+        
+
+        if(document.getElementById('val-lcd-line2')) document.getElementById('val-lcd-line2').innerText = data.line2;
+        if(document.getElementById('val-lcd-line1')) document.getElementById('val-lcd-line1').innerText = data.line1;
+
+        if(document.getElementById('val-4sd')) document.getElementById('val-4sd').innerText = data._4sd_current_value;
+
+        if(document.getElementById('val-ds2')) document.getElementById('val-ds2').innerText = data.ds2;
+        if(document.getElementById('val-ds1')) document.getElementById('val-ds1').innerText = data.ds1;
+        if(document.getElementById('val-dl')) document.getElementById('val-dl').innerText = data.dl;
+        if(document.getElementById('val-db')) document.getElementById('val-db').innerText = data.db;
+        
+        const peopleElements = document.querySelectorAll('[id^="val-people"]');
+        peopleElements.forEach(el => el.innerText = data.people_count);
+
+        // Automatska promena boje dugmeta za alarm
+        const btn = document.getElementById('alarmBtn');
+        if (data.alarm_triggered) {
+            btn.style.backgroundColor = 'red';
+            btn.textContent = 'ALARM AKTIVAN 🟢';
+        } else {
+            btn.style.backgroundColor = 'green';
+            btn.textContent = 'ALARM NEAKTIVAN 🔴';
+        }
+    });   
 </script>
 
 </body>
