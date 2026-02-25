@@ -5,37 +5,47 @@ import json
 from common.mqqt_sender import batch_queue
 from simulators.db_simulator import set_buzzer_state
 
-
+send_turn_on = False
+send_turn_off = False
 
 def turn_alarm_on(device_info, settings, from_server = False):
+    global send_turn_on, send_turn_off
     if from_server:
         set_buzzer_state(True)
         print(f"!!! ALARM WAS ACTIVATED!!!")
     else:
-        payload = {
-            "measurement": "alarm_events",
-            "device_name": device_info['device_name'],
-            "pi_id": device_info['pi_id'],
-            "code": settings["code"],
-            "simulated" : settings['simulated'],
-            "value": 1
-        }
-        print(payload)
-        batch_queue.put(payload)
+        if not send_turn_on:
+            payload = {
+                "measurement": "alarm_events",
+                "device_name": device_info['device_name'],
+                "pi_id": device_info['pi_id'],
+                "code": settings["code"],
+                "simulated" : settings['simulated'],
+                "value": 1
+            }
+            print(payload)
+            send_turn_on = True
+            send_turn_off = False
+            batch_queue.put(payload)
 
 def turn_alarm_off(device_info, from_server = False):
+    global send_turn_on, send_turn_off
     if from_server:
         set_buzzer_state(False)
         print("ALARM WAS DEACTIVATED")
     else:    
-        payload = {
-            "measurement": "alarm_events",
-            "device_name": device_info['device_name'],
-            "pi_id": device_info['pi_id'],
-            "code": "PIN_OR_WEB_DEACTIVATION",
-            "value": 0 
-        }
-        batch_queue.put(payload)
+        if not send_turn_off:
+            payload = {
+                "measurement": "alarm_events",
+                "device_name": device_info['device_name'],
+                "pi_id": device_info['pi_id'],
+                "code": "PIN_OR_WEB_DEACTIVATION",
+                "value": 0 
+            }
+            print(payload)
+            send_turn_off = True
+            send_turn_on = False
+            batch_queue.put(payload)
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe("commands/alarm")

@@ -3,7 +3,7 @@ import random
 
 def generate_gsg_values():
     while True:
-        if random.random() < 0.9:
+        if random.random() < 0.95:
             accel = [round(random.uniform(-0.05, 0.05), 3), 
                      round(random.uniform(-0.05, 0.05), 3), 
                      round(random.uniform(0.95, 1.05), 3)]

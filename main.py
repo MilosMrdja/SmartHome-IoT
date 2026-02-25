@@ -70,7 +70,7 @@ if __name__ == "__main__":
         
         run_dpir1(settings['DPIR1'], threads, stop_event, device_info) # vezbe 2, 5v 
         run_db(settings['DB'], threads, stop_event, device_info) # vezbe 2
-        #run_dms(settings['DMS'], threads, stop_event, device_info) # vezbe 4
+        run_dms(settings['DMS'], threads, stop_event, device_info) # vezbe 4
         # run_webc(settings['WEBC'],threads, stop_event, device_info)
         # export http_proxy="http://proxy.uns.ac.rs:8080"
         # export https_proxy="http://proxy.uns.ac.rs:8080"
@@ -86,12 +86,12 @@ if __name__ == "__main__":
         listener_thread.start()
         threads.append(listener_thread)
         run_ds2(settings['DS2'], threads, stop_event, device_info)
-        #run_dus2(settings['DUS2'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
-        #run_dpir2(settings['DPIR2'], threads, stop_event, device_info) # vezbe 2
+        run_dus2(settings['DUS2'], threads, stop_event, device_info) # vezbe 3, jedan provodin 330, dva redna od 220
+        run_dpir2(settings['DPIR2'], threads, stop_event, device_info) # vezbe 2
         run_4sd(settings['4SD'], threads, stop_event, device_info) # vezbe 4 # nece biti
-        #run_btn(settings['BTN'], threads, stop_event, device_info)
+        run_btn(settings['BTN'], threads, stop_event, device_info)
         run_dht3(settings['DHT3'], threads, stop_event, device_info) # vezbe 3
-        #run_gsg(settings['GSG'], threads, stop_event, device_info) # vezbe 6
+        run_gsg(settings['GSG'], threads, stop_event, device_info) # vezbe 6
     elif settings["device_info"]["pi_id"] == "PI3":
         listener_thread = threading.Thread(
             target=run_ir_remote_listener, 
@@ -105,7 +105,7 @@ if __name__ == "__main__":
         run_ir(settings['IR'], threads, stop_event, device_info) # vezbe 5
         run_brgb(settings['BRGB'], threads, stop_event, device_info) # vezbe 4 # otpornici 220 oma # ne ide na 3.3v nego na ground
         run_lcd(settings['LCD'], threads, stop_event, device_info) # vezbe 3
-        #run_dpir3(settings['DPIR3'], threads, stop_event, device_info) # vezbe 2
+        run_dpir3(settings['DPIR3'], threads, stop_event, device_info) # vezbe 2
 
 
 

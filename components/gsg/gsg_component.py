@@ -6,16 +6,6 @@ from simulators.gsg_simulator import run_gsg_simulator
 from scripts.alarm import turn_alarm_on
 
 def gsg_callback(code, device_info, settings, accel, gyro):
-    accel_threshold = 0.5
-    gyro_threshold = 20.0
-    
-    significant_move = any(abs(a) > accel_threshold for a in accel[:2]) or \
-                       abs(accel[2] - 1.0) > accel_threshold or \
-                       any(abs(g) > gyro_threshold for g in gyro)
-
-    if significant_move:
-        turn_alarm_on(device_info=device_info, settings=settings)
-
     payload = {
         "measurement": "gyroscope",
         "device_name": device_info['device_name'],

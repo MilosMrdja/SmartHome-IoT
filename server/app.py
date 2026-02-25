@@ -31,15 +31,15 @@ dht3_hum = 0
 _4sd_current_value = "0100"
 line1 = ""
 line2 = ""
-ds2 = "Otvoreno"
-ds1 = "Otvoreno"
-dl = "Ukljuceno"
-db = "Ukljuceno"
+ds2 = "Zatvoreno"
+ds1 = "Zatvoreno"
+dl = "Iskljuceno"
+db = "Iskljuceno"
 
 HOME_PIN = "1234"
 CURRENT_PIN = ""
 ALARM_TRIGGERED = False # alarm radi
-ALARM_ACTIVATED = True # alarm je spreman za rad
+ALARM_ACTIVATED = False # alarm je spreman za rad
 
 
 # --- MQTT CALLBACKS ---
@@ -64,7 +64,8 @@ def handle_vars(payload, client):
         if payload['people_count'] is True:
             people_count += 1
         elif people_count is None:
-            pass
+            if people_count == 0:
+                alarm(client=client)
         elif payload['people_count'] is False :
             if people_count > 0:
                 people_count -= 1
@@ -96,6 +97,18 @@ def handle_vars(payload, client):
                 alarm(client=client)
 
             CURRENT_PIN = ""
+            
+    elif payload['code'] == "GSG":
+        accel = payload['accel']
+        gyro = payload['gyro']
+        accel_threshold = 1.2
+        gyro_threshold = 40.0
+        
+        significant_move = any(abs(a) > accel_threshold for a in accel[:2]) or abs(accel[2] - 1.0) > accel_threshold or any(abs(g) > gyro_threshold for g in gyro)
+
+        print(payload)
+        if significant_move:
+            alarm(client=client, state = True)
 
 def activate_system_with_delay():
     global ALARM_ACTIVATED
@@ -296,7 +309,7 @@ def index():
 
 @app.route('/toggle_alarm', methods=['POST'])
 def toggle_alarm():
-    global ALARM_TRIGGERED, CURRENT_PIN
+    global ALARM_TRIGGERED, CURRENT_PIN, ds1, ds2
     if ALARM_TRIGGERED:
         CURRENT_PIN = ""
         alarm(mqtt_client,state=False)
